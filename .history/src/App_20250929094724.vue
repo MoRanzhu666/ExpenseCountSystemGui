@@ -1,5 +1,8 @@
 <template>
-  <router-view></router-view>
+  <nav>
+    <router-link to="/" >首页</router-link>
+    <router-link to="/about">关于</router-link>
+  </nav>
 </template>
 
 <script>
