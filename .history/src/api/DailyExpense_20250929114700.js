@@ -1,0 +1,13 @@
+import axios from "axios"
+
+const baseUrl = process.env.BASE_URL
+
+const getPage = (data)=>{
+    return axios.post(baseUrl+"/dailyExpenses/getPage?current=1&size=50").then(resp =>{
+        return resp;
+    })
+}
+
+export const dailyExpenseService = {
+getPage
+}
