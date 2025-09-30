@@ -69,8 +69,9 @@ const tableRef = ref();
 const handleSelectionChangeDefault = (rows) => {
   if (props.handleSelectionChange) {
     props.handleSelectionChange(rows); // 调用外部函数
+  } else {
+    console.log("默认选择：", rows);
   }
-  console.log("默认选择：", rows);
 };
 
 // 处理行点击事件

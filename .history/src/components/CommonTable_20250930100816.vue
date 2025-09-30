@@ -9,7 +9,11 @@
       @selection-change="handleSelectionChangeDefault"
       @row-click="handleRowClickDefault"
     >
-      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column
+        type="selection"
+        width="55"
+        align="center"
+      />
       <el-table-column
         v-for="item in tableHeaderList"
         :key="item.prop"
@@ -48,10 +52,10 @@ const props = defineProps({
   disabled: Boolean,
   background: Boolean,
   handleSelectionChange: Function, // 外部传入的函数
-  handleRowClick: Function, // 外部传入的函数
+  handleRowClick: Function          // 外部传入的函数
 });
 
-defineEmits(["update:size", "update:current"]);
+const emit = defineEmits(["update:size", "update:current"]);
 
 const localPageParams = ref({ ...props.pageParams });
 
@@ -69,19 +73,22 @@ const tableRef = ref();
 const handleSelectionChangeDefault = (rows) => {
   if (props.handleSelectionChange) {
     props.handleSelectionChange(rows); // 调用外部函数
+  } else {
+    console.log("默认选择：", rows);
   }
-  console.log("默认选择：", rows);
 };
 
 // 处理行点击事件
 const handleRowClickDefault = (row) => {
   if (props.handleRowClick) {
     props.handleRowClick(row); // 调用外部函数
+  } else {
+    console.log("默认点击行：", row);
+    tableRef.value.clearSelection();
+    tableRef.value.toggleRowSelection(row);
   }
-  console.log("默认点击行：", row);
-  tableRef.value.clearSelection();
-  tableRef.value.toggleRowSelection(row);
 };
+
 </script>
 
 <style></style>

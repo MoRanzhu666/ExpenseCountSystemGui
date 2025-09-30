@@ -31,9 +31,7 @@
 
     <!-- Footer -->
     <el-footer :style="`height: ${footerHeight}; display:flex; align-items:center; padding:0 20px; background:#f5f7fa;`">
-      <slot name="footer">
-        <footer-view/>
-      </slot>
+      <slot name="footer">Footer</slot>
     </el-footer>
   </el-container>
 </template>
@@ -43,7 +41,6 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import MenuItem from "./component/MenuItem.vue"; // 递归菜单组件
 import HeaderView from "../Header/HeaderView.vue";
-import FooterView from "../Footer/FooterView.vue";
 
 const props = defineProps({
   leftWidth: { type: [Number, String], default: "200px" },

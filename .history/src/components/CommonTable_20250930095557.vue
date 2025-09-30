@@ -6,10 +6,14 @@
       border
       :row-key="(row) => row.id"
       height="70vh"
-      @selection-change="handleSelectionChangeDefault"
-      @row-click="handleRowClickDefault"
+      @selection-change="handleSelectionChange"
+      @row-click="handleRowClick"
     >
-      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column
+        type="selection"
+        width="55"
+        align="center"
+      ></el-table-column>
       <el-table-column
         v-for="item in tableHeaderList"
         :key="item.prop"
@@ -18,9 +22,9 @@
         :width="item.width"
         :align="item.align"
         :formatter="item.formatter"
-      />
+      >
+      </el-table-column>
     </el-table>
-
     <div class="page-bar">
       <el-pagination
         v-model:current-page="localPageParams.current"
@@ -42,46 +46,35 @@
 import { ref, watch } from "vue";
 
 const props = defineProps({
-  tableData: { type: Array, default: () => [] },
-  tableHeaderList: { type: Array, default: () => [] },
-  pageParams: { type: Object, default: () => ({}) },
+  tableData: Object,
+  tableHeaderList: Array,
+  pageParams: Object,
   disabled: Boolean,
   background: Boolean,
-  handleSelectionChange: Function, // 外部传入的函数
-  handleRowClick: Function, // 外部传入的函数
 });
 
-defineEmits(["update:size", "update:current"]);
-
+// 分页参数本地副本（常用于分页组件双向绑定）
 const localPageParams = ref({ ...props.pageParams });
 
 watch(
   () => props.pageParams,
   (newVal) => {
-    localPageParams.value = { ...newVal };
+    localPageParams.value = { ...newVal }; // 同步分页参数
   },
   { deep: true }
 );
 
-const tableRef = ref();
+const tableRef = ref()
 
-// 处理选择事件
-const handleSelectionChangeDefault = (rows) => {
-  if (props.handleSelectionChange) {
-    props.handleSelectionChange(rows); // 调用外部函数
-  }
-  console.log("默认选择：", rows);
+const handleSelectionChange = (row) => {
+  console.log(row);
 };
+const handleRowClick = (row)=>{
+  console.log(row)
+  tableRef.toggleRowSelection(row)
+}
 
-// 处理行点击事件
-const handleRowClickDefault = (row) => {
-  if (props.handleRowClick) {
-    props.handleRowClick(row); // 调用外部函数
-  }
-  console.log("默认点击行：", row);
-  tableRef.value.clearSelection();
-  tableRef.value.toggleRowSelection(row);
-};
+defineEmits(["update:size", "update:current"]);
 </script>
 
 <style></style>
