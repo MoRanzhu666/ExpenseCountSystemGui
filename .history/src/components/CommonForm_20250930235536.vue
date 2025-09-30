@@ -9,7 +9,7 @@
           :key="index"
           :label="item.lable"
         >
-          <el-input v-model="item.value" :type="item.type" :precision="item.precision" @keydown.enter="handleAdd(processFormData(formData))"></el-input>
+          <el-input v-model="item.value" :type="item.type" :precision="item.precision"></el-input>
         </el-form-item>
       </el-form>
     </div>

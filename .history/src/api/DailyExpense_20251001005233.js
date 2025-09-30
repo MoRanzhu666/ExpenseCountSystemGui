@@ -32,16 +32,6 @@ const update = (data) => {
 const deleteById = (data)=>{
   return axios.delete(baseUrl + "/dailyExpenses/deleteById", {
     params: {
-      id: data.id,
-    },
-  }).then((resp) => {
-    return resp.data;
-  });
-}
-
-const deleteByIds = (data)=>{
-  return axios.delete(baseUrl + "/dailyExpenses/deleteByIds", {
-    params: {
       ids: data.ids,
     },
   }).then((resp) => {
@@ -53,6 +43,5 @@ export const dailyExpenseService = {
   getPage,
   add,
   update,
-  deleteById,
-  deleteByIds
+  deleteById
 };

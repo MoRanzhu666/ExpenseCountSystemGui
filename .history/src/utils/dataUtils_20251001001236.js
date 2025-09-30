@@ -49,6 +49,5 @@ export const dataUtils = {
   processRespData,
   processRespPageParams,
   processMap,
-  handleRespMessage,
-  formatDate
+  handleRespMessage
 };

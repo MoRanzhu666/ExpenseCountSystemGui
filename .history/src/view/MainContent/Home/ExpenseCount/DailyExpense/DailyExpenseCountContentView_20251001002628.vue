@@ -145,9 +145,7 @@ const handlerUpdate = () => {
 };
 const handlerDelete = async () => {
   console.log("delete", selectedRows.value);
-  const ids = []
-  selectedRows.value.map((item) => ids.push( item.id));
-  const resp = await dailyExpenseService.deleteByIds({ ids: ids })
+  const resp = await dailyExpenseService.deleteById({ id: selectedRows.value[0].id })
   if (dataUtils.handleRespMessage(resp)) {
     initData();
   }
@@ -178,7 +176,7 @@ const buttonList = ref({
     title: "update",
     handler: handlerUpdate,
     type: "primary",
-    disabled: true,
+    disabled: false,
     size: "default",
   },
   delete: {
@@ -186,7 +184,7 @@ const buttonList = ref({
     title: "delete",
     handler: handlerDelete,
     type: "danger",
-    disabled: true,
+    disabled: false,
     size: "default",
   },
 });
@@ -198,12 +196,9 @@ watch(
   (newVal) => {
     if (newVal.length != 1) {
       disableUpdate();
-    } else {
-      startUpdate();
-    }
-    if (newVal.length < 1) {
       disableDelete();
     } else {
+      startUpdate();
       startDelete();
     }
   },

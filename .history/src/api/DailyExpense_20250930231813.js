@@ -13,19 +13,19 @@ const getPage = (data) => {
       },
     })
     .then((resp) => {
-      return resp.data;
+      return resp;
     });
 };
 
 const add = (data) => {
   return axios.post(baseUrl + "/dailyExpenses/add", data).then((resp) => {
-    return resp.data;
+    return resp;
   });
 };
 
 const update = (data) => {
   return axios.put(baseUrl + "/dailyExpenses/update", data).then((resp) => {
-    return resp.data;
+    return resp;
   });
 };
 
@@ -35,17 +35,7 @@ const deleteById = (data)=>{
       id: data.id,
     },
   }).then((resp) => {
-    return resp.data;
-  });
-}
-
-const deleteByIds = (data)=>{
-  return axios.delete(baseUrl + "/dailyExpenses/deleteByIds", {
-    params: {
-      ids: data.ids,
-    },
-  }).then((resp) => {
-    return resp.data;
+    return resp;
   });
 }
 
@@ -53,6 +43,5 @@ export const dailyExpenseService = {
   getPage,
   add,
   update,
-  deleteById,
-  deleteByIds
+  deleteById
 };

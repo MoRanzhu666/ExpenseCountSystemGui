@@ -145,9 +145,7 @@ const handlerUpdate = () => {
 };
 const handlerDelete = async () => {
   console.log("delete", selectedRows.value);
-  const ids = []
-  selectedRows.value.map((item) => ids.push( item.id));
-  const resp = await dailyExpenseService.deleteByIds({ ids: ids })
+  const resp = await dailyExpenseService.deleteById({ id: selectedRows.value[0].id })
   if (dataUtils.handleRespMessage(resp)) {
     initData();
   }
@@ -201,7 +199,7 @@ watch(
     } else {
       startUpdate();
     }
-    if (newVal.length < 1) {
+    if (newVal.length > 1) {
       disableDelete();
     } else {
       startDelete();

@@ -39,16 +39,9 @@ const handleRespMessage = (resp)=>{
   }
 }
 
-const formatDate = (year, month, day) => {
-  const m = month < 10 ? `0${month}` : month;
-  const d = day < 10 ? `0${day}` : day;
-  return `${year}-${m}-${d}`;
-}
-
 export const dataUtils = {
   processRespData,
   processRespPageParams,
   processMap,
-  handleRespMessage,
-  formatDate
+  handleRespMessage
 };

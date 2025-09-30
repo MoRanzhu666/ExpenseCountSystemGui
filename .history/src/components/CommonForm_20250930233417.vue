@@ -5,11 +5,11 @@
         <h3>{{ formTitle }}</h3>
         <el-form-item
           v-for="(item, index) in formData"
-          v-show="item.lable !== 'id' && item.type !== 'hidden'"
+          v-show="item.lable !== 'id'"
           :key="index"
           :label="item.lable"
         >
-          <el-input v-model="item.value" :type="item.type" :precision="item.precision" @keydown.enter="handleAdd(processFormData(formData))"></el-input>
+          <el-input v-model="item.value" :type="item.type" :precision="item.precision"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -26,7 +26,7 @@
       class="submit"
       style="display: flex; justify-content: right; padding-top: 10px"
     >
-      <el-button @click="handleAdd(processFormData(formData))" type="primary">提交</el-button>
+      <el-button @click="handleAdd(formData)" type="primary">提交</el-button>
       <el-button @click="() => $emit('closeForm')">取消</el-button>
     </div>
   </div>
@@ -48,7 +48,6 @@ const processFormData = (data) => {
   for (const key in data) {
     newFormData[key] = data[key].value;
   }
-  return newFormData;
 };
 
 onMounted(() => {

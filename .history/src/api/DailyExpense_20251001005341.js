@@ -42,7 +42,7 @@ const deleteById = (data)=>{
 const deleteByIds = (data)=>{
   return axios.delete(baseUrl + "/dailyExpenses/deleteByIds", {
     params: {
-      ids: data.ids,
+      id: data.id,
     },
   }).then((resp) => {
     return resp.data;

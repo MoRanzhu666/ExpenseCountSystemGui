@@ -100,7 +100,6 @@ const handleFormData = (data) => {
   for (let i in formData.value) {
     formData.value[i].value = data[i];
   }
-  formData.value.date.value = dataUtils.formatDate(data.year, data.month, data.day);
 };
 const closeForm = () => {
   isShowForm.value = false;
@@ -116,16 +115,14 @@ const handleSubmit = async (formData) => {
     const resp = await dailyExpenseService.update(formData);
     if (dataUtils.handleRespMessage(resp)) {
       closeForm();
-      initData();
     }
   } else {
     const resp = await dailyExpenseService.add(formData);
     if (dataUtils.handleRespMessage(resp)) {
       closeForm();
-      initData();
     }
   }
-  
+  initData();
   // const resp =  dailyExpenseService.add(formData)
   // dataUtils.handleRespMessage(resp);
 };
@@ -142,27 +139,16 @@ const handlerUpdate = () => {
   isShowForm.value = true;
   handleFormData(selectedRows.value[0]);
   formTitle.value = "日费用记录编辑";
+  console.log("update", formData.value);
 };
-const handlerDelete = async () => {
+const handlerDelete = () => {
   console.log("delete", selectedRows.value);
-  const ids = []
-  selectedRows.value.map((item) => ids.push( item.id));
-  const resp = await dailyExpenseService.deleteByIds({ ids: ids })
-  if (dataUtils.handleRespMessage(resp)) {
-    initData();
-  }
 };
 const disableUpdate = () => {
   buttonList.value.update.disabled = true;
 };
 const startUpdate = () => {
   buttonList.value.update.disabled = false;
-};
-const disableDelete = () => {
-  buttonList.value.delete.disabled = true;
-};
-const startDelete = () => {
-  buttonList.value.delete.disabled = false;
 };
 const buttonList = ref({
   add: {
@@ -178,7 +164,7 @@ const buttonList = ref({
     title: "update",
     handler: handlerUpdate,
     type: "primary",
-    disabled: true,
+    disabled: false,
     size: "default",
   },
   delete: {
@@ -186,7 +172,7 @@ const buttonList = ref({
     title: "delete",
     handler: handlerDelete,
     type: "danger",
-    disabled: true,
+    disabled: false,
     size: "default",
   },
 });
@@ -200,11 +186,6 @@ watch(
       disableUpdate();
     } else {
       startUpdate();
-    }
-    if (newVal.length < 1) {
-      disableDelete();
-    } else {
-      startDelete();
     }
   },
   {

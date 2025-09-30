@@ -17,7 +17,7 @@ const processRespPageParams = (pageEntity, resp)=>{
 }
 
 const isSuscessResp = (resp) => {
-  if (resp && resp.code === 200) {
+  if (resp && resp.data.code === 200) {
     return true;
   }
   return false;
@@ -32,23 +32,14 @@ const handleRespMessage = (resp)=>{
   console.log("resp",resp, resp.code===200);
   if(resp && resp.code===200){
     ElMessage.success(resp.message)
-    return true
   }else{
     ElMessage.error(resp.message)
-    return false
   }
-}
-
-const formatDate = (year, month, day) => {
-  const m = month < 10 ? `0${month}` : month;
-  const d = day < 10 ? `0${day}` : day;
-  return `${year}-${m}-${d}`;
 }
 
 export const dataUtils = {
   processRespData,
   processRespPageParams,
   processMap,
-  handleRespMessage,
-  formatDate
+  handleRespMessage
 };

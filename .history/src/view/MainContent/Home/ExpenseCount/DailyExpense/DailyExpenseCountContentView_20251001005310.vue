@@ -147,7 +147,7 @@ const handlerDelete = async () => {
   console.log("delete", selectedRows.value);
   const ids = []
   selectedRows.value.map((item) => ids.push( item.id));
-  const resp = await dailyExpenseService.deleteByIds({ ids: ids })
+  const resp = await dailyExpenseService.deleteById({ ids: ids })
   if (dataUtils.handleRespMessage(resp)) {
     initData();
   }
