@@ -13,7 +13,7 @@ request.interceptors.request.use(
   (config) => {
     // 从本地存储获取token并添加到请求头
     // const token = localStorage.getItem('token');
-    const token = "387ddf87-aaea-4851-a1ff-66dcea2218b0";
+    const token = "fac9cc2c-00fa-4e77-bd30-07df342286b3";
     if (token) {
       config.headers["token"] = token;
     }

@@ -33,49 +33,49 @@ const formTitle = ref("系统代码编辑");
 const formData = ref({
   // 分类字段
   category: {
-    lable: "分类",
+    label: "分类",
     value: "",
     type: "text", 
     align: "center"
   },
   // 编码字段
   code: {
-    lable: "编码",
+    label: "编码",
     value: "",
     type: "text", 
     align: "center"
   },
   // 描述字段
   describe: {
-    lable: "描述",
+    label: "描述",
     value: "",
     type: "text",
     align: "center"
   },
   // 创建人字段
   createByName: {
-    lable: "创建人",
+    label: "创建人",
     value: "",
     type: "hidden", 
     align: "center"
   },
   // 创建时间字段
   createTime: {
-    lable: "创建时间",
+    label: "创建时间",
     value: "",
     type: "hidden", 
     align: "center"
   },
   // 更新人字段
   updateByName: {
-    lable: "更新人",
+    label: "更新人",
     value: "",
     type: "hidden", 
     align: "center"
   },
   // 更新时间字段
   updateTime: {
-    lable: "更新时间",
+    label: "更新时间",
     value: "",
     type: "hidden",
     align: "center"

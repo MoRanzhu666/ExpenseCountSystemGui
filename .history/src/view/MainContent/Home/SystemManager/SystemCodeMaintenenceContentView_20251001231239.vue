@@ -29,68 +29,79 @@ import CommonForm from "@/components/CommonForm.vue";
 import { ccodeService } from "@/api/system/CCode";
 
 // 通用表单
-const formTitle = ref("系统代码编辑");
+const formTitle = ref("日费用记录编辑");
 const formData = ref({
-  // 分类字段
-  category: {
-    lable: "分类",
+  id: {
+    lable: "id",
     value: "",
-    type: "text", 
-    align: "center"
   },
-  // 编码字段
-  code: {
-    lable: "编码",
+  // year: {
+  //   lable: "年份",
+  //   value: "",
+  //   type: "number",
+  // },
+  // month: {
+  //   lable: "月份",
+  //   value: "",
+  //   type: "number",
+  // },
+  // day: {
+  //   lable: "日期",
+  //   value: "",
+  //   type: "number",
+  // },
+  date: {
+    lable: "日期",
     value: "",
-    type: "text", 
-    align: "center"
+    type: "date",
   },
-  // 描述字段
-  describe: {
-    lable: "描述",
+  singleExpense: {
+    lable: "单次支出",
     value: "",
-    type: "text",
-    align: "center"
+    type: "number",
+    precision: "2",
   },
-  // 创建人字段
+  expenseReason: {
+    lable: "支出原因",
+    value: "",
+  },
+  expenseContent: {
+    lable: "消费内容",
+    value: "",
+  },
+  dailyTotal: {
+    lable: "日消费",
+    value: "",
+    precision: "2",
+    type: `hidden`,
+  },
   createByName: {
     lable: "创建人",
     value: "",
-    type: "hidden", 
-    align: "center"
+    type: `hidden`,
   },
-  // 创建时间字段
   createTime: {
     lable: "创建时间",
     value: "",
-    type: "hidden", 
-    align: "center"
+    type: `hidden`,
   },
-  // 更新人字段
   updateByName: {
     lable: "更新人",
     value: "",
-    type: "hidden", 
-    align: "center"
+    type: `hidden`,
   },
-  // 更新时间字段
   updateTime: {
     lable: "更新时间",
     value: "",
     type: "hidden",
-    align: "center"
-  }
+  },
 });
 const isShowForm = ref(false);
 const handleFormData = (data) => {
   for (let i in formData.value) {
     formData.value[i].value = data[i];
   }
-  formData.value.date.value = dataUtils.formatDate(
-    data.year,
-    data.month,
-    data.day
-  );
+  formData.value.date.value = dataUtils.formatDate(data.year, data.month, data.day);
 };
 const closeForm = () => {
   isShowForm.value = false;
@@ -115,7 +126,7 @@ const handleSubmit = async (formData) => {
       initData();
     }
   }
-
+  
   // const resp =  dailyExpenseService.add(formData)
   // dataUtils.handleRespMessage(resp);
 };
@@ -135,9 +146,9 @@ const handlerUpdate = () => {
 };
 const handlerDelete = async () => {
   console.log("delete", selectedRows.value);
-  const ids = [];
-  selectedRows.value.map((item) => ids.push(item.id));
-  const resp = await dailyExpenseService.deleteByIds({ ids: ids });
+  const ids = []
+  selectedRows.value.map((item) => ids.push( item.id));
+  const resp = await dailyExpenseService.deleteByIds({ ids: ids })
   if (dataUtils.handleRespMessage(resp)) {
     initData();
   }
@@ -213,51 +224,96 @@ const tableData = ref([]);
 const tableHeaderList = ref([
   {
     label: "序号",
-    prop: "index",
+    prop: "index", // 可自定义一个不存在的prop（仅用于标识）
     width: 80,
     align: "center",
-    formatter: (row, column, cellValue, index) => { return index + 1; },
+    // 关键：通过formatter结合行索引生成序号（index从0开始，+1变为从1开始）
+    formatter: (row, column, cellValue, index) => {
+      return index + 1; // 序号从1开始递增
+    },
   },
   // {
   //   label: "ID",
   //   prop: "id",
-  //   width: 120,
+  //   width: 80,
   //   align: "center",
   // },
+
   {
-    label: "分类",
-    prop: "category",
+    label: "年份",
+    prop: "year",
+    width: 80,
     align: "center",
   },
   {
-    label: "编码",
-    prop: "code",
+    label: "月份",
+    prop: "month",
+    width: 80,
     align: "center",
   },
   {
-    label: "描述",
-    prop: "describe",
+    label: "日期",
+    prop: "day",
+    width: 80,
     align: "center",
+  },
+  {
+    label: "单次支出",
+    prop: "singleExpense",
+    width: 120,
+    align: "center",
+    formatter: (row) => `¥${row.singleExpense?.toFixed(2)}`,
+  },
+  {
+    label: "支出原因",
+    prop: "expenseReason",
+    width: 150,
+    align: "center",
+  },
+  {
+    label: "支出内容",
+    prop: "expenseContent",
+    width: 180,
+    align: "center",
+  },
+  {
+    label: "每日总计",
+    prop: "dailyTotal",
+    width: 120,
+    align: "center",
+    formatter: (row) => `¥${row.dailyTotal?.toFixed(2)}`,
   },
   {
     label: "创建人",
     prop: "createByName",
+    width: 120,
     align: "center",
+    type: "slot",
   },
   {
     label: "创建时间",
     prop: "createTime",
     align: "center",
+    // 格式化时间显示（可根据需要自定义）
+    formatter: (row) => {
+      if (!row.createTime) return "";
+      return new Date(row.createTime).toLocaleString();
+    },
   },
   {
     label: "更新人",
     prop: "updateByName",
+    width: 120,
     align: "center",
   },
   {
     label: "更新时间",
     prop: "updateTime",
     align: "center",
+    formatter: (row) => {
+      if (!row.updateTime) return "";
+      return new Date(row.updateTime).toLocaleString();
+    },
   },
 ]);
 const pageParams = ref({

@@ -3,17 +3,17 @@ import router from "@/router"; // 导入路由实例
 import { ElMessage } from "element-plus";
 
 // 创建axios实例
-const request = axios.create({
+const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: 5000,
 });
 
 // 请求拦截器（可选，添加token等）
-request.interceptors.request.use(
+service.interceptors.request.use(
   (config) => {
     // 从本地存储获取token并添加到请求头
     // const token = localStorage.getItem('token');
-    const token = "387ddf87-aaea-4851-a1ff-66dcea2218b0";
+    const token = "fac9cc2c-00fa-4e77-bd30-07df342286b3";
     if (token) {
       config.headers["token"] = token;
     }
@@ -25,7 +25,7 @@ request.interceptors.request.use(
 );
 
 // 响应拦截器（处理异常）
-request.interceptors.response.use(
+service.interceptors.response.use(
   (response) => {
     // 正常响应直接返回数据
 

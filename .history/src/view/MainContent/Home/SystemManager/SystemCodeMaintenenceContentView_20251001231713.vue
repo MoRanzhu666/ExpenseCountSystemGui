@@ -29,57 +29,72 @@ import CommonForm from "@/components/CommonForm.vue";
 import { ccodeService } from "@/api/system/CCode";
 
 // 通用表单
-const formTitle = ref("系统代码编辑");
+const formTitle = ref("日费用记录编辑");
 const formData = ref({
-  // 分类字段
-  category: {
-    lable: "分类",
+  id: {
+    lable: "id",
     value: "",
-    type: "text", 
-    align: "center"
   },
-  // 编码字段
-  code: {
-    lable: "编码",
+  // year: {
+  //   lable: "年份",
+  //   value: "",
+  //   type: "number",
+  // },
+  // month: {
+  //   lable: "月份",
+  //   value: "",
+  //   type: "number",
+  // },
+  // day: {
+  //   lable: "日期",
+  //   value: "",
+  //   type: "number",
+  // },
+  date: {
+    lable: "日期",
     value: "",
-    type: "text", 
-    align: "center"
+    type: "date",
   },
-  // 描述字段
-  describe: {
-    lable: "描述",
+  singleExpense: {
+    lable: "单次支出",
     value: "",
-    type: "text",
-    align: "center"
+    type: "number",
+    precision: "2",
   },
-  // 创建人字段
+  expenseReason: {
+    lable: "支出原因",
+    value: "",
+  },
+  expenseContent: {
+    lable: "消费内容",
+    value: "",
+  },
+  dailyTotal: {
+    lable: "日消费",
+    value: "",
+    precision: "2",
+    type: `hidden`,
+  },
   createByName: {
     lable: "创建人",
     value: "",
-    type: "hidden", 
-    align: "center"
+    type: `hidden`,
   },
-  // 创建时间字段
   createTime: {
     lable: "创建时间",
     value: "",
-    type: "hidden", 
-    align: "center"
+    type: `hidden`,
   },
-  // 更新人字段
   updateByName: {
     lable: "更新人",
     value: "",
-    type: "hidden", 
-    align: "center"
+    type: `hidden`,
   },
-  // 更新时间字段
   updateTime: {
     lable: "更新时间",
     value: "",
     type: "hidden",
-    align: "center"
-  }
+  },
 });
 const isShowForm = ref(false);
 const handleFormData = (data) => {
@@ -212,52 +227,60 @@ const handleSelectionChange = (rows) => {
 const tableData = ref([]);
 const tableHeaderList = ref([
   {
-    label: "序号",
-    prop: "index",
-    width: 80,
-    align: "center",
-    formatter: (row, column, cellValue, index) => { return index + 1; },
-  },
-  // {
-  //   label: "ID",
-  //   prop: "id",
-  //   width: 120,
-  //   align: "center",
-  // },
-  {
-    label: "分类",
-    prop: "category",
-    align: "center",
+    title: "ID",
+    field: "id",
+    width: 100,
+    sortable: true,
+    formatter: null,
   },
   {
-    label: "编码",
-    prop: "code",
-    align: "center",
+    title: "分类",
+    field: "category",
+    width: 150,
+    sortable: true,
+    formatter: null,
   },
   {
-    label: "描述",
-    prop: "describe",
-    align: "center",
+    title: "编码",
+    field: "code",
+    width: 150,
+    sortable: true,
+    formatter: null,
   },
   {
-    label: "创建人",
-    prop: "createByName",
-    align: "center",
+    title: "描述",
+    field: "describe",
+    width: 200,
+    sortable: false,
+    formatter: null,
   },
   {
-    label: "创建时间",
-    prop: "createTime",
-    align: "center",
+    title: "创建人",
+    field: "createBy",
+    width: 120,
+    sortable: true,
+    formatter: null,
   },
   {
-    label: "更新人",
-    prop: "updateByName",
-    align: "center",
+    title: "创建时间",
+    field: "createTime",
+    width: 180,
+    sortable: true,
+    formatter: "yyyy-MM-dd HH:mm:ss",
   },
   {
-    label: "更新时间",
-    prop: "updateTime",
-    align: "center",
+    title: "更新人",
+    field: "updateBy",
+    width: 120,
+    sortable: true,
+    formatter: null,
+  },
+  {
+    title: "更新时间",
+    field: "updateTime",
+    width: 180,
+    sortable: true,
+    formatter: "yyyy-MM-dd HH:mm:ss",
   },
 ]);
 const pageParams = ref({
