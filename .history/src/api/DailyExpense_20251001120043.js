@@ -1,4 +1,4 @@
-// import axios from "axios";
+import axios from "axios";
 import request from "../request/requst";
 
 const baseUrl = process.env.VUE_APP_BASE_URL;
@@ -6,13 +6,16 @@ const baseUrl = process.env.VUE_APP_BASE_URL;
  * axios响应：resp.data 中存储的才是实际响应
  */
 const getPage = (data) => {
-  return request
+  return axios
     .get(
       baseUrl + "/dailyExpenses/getPage",
       {
         params: {
           current: data.current,
           size: data.size,
+        },
+        headers: {
+          token: "f21551b9-67f0-4925-90bd-a9b9bf2f235e",
         },
       }
     )

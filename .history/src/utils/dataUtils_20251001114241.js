@@ -1,6 +1,7 @@
 import { ElMessage } from "element-plus";
 
 const processRespData = (entity, resp, pm) => {
+  console.log("processRespData", resp, pm);
 
   if (isSuscessResp(resp) && pm == 1) {
     entity.value = resp.data;
