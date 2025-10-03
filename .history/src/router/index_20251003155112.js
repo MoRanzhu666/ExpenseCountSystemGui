@@ -116,7 +116,7 @@ const routes = [
 
 // 创建路由实例
 const router = createRouter({
-  history: createWebHashHistory(), 
+  history: createWebHashHistory(process.env.BASE_URL), 
   routes,
 });
 

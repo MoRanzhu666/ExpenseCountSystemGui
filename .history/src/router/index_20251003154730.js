@@ -116,8 +116,8 @@ const routes = [
 
 // 创建路由实例
 const router = createRouter({
-  history: createWebHashHistory(), 
-  routes,
+  history: createWebHashHistory(process.env.BASEURL), // HTML5 History模式（无#）
+  routes, // 注入路由规则
 });
 
 export default router;
