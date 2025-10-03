@@ -1,6 +1,5 @@
 <template>
   <common-tool-bar :buttonList="buttonList" />
-  <common-search-form :searchKey="searchKey" :handleSearch="handleSearch"/>
   <common-table
     :table-data="tableData"
     :table-header-list="tableHeaderList"
@@ -27,14 +26,7 @@ import { onMounted, ref, watch } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonToolBar from "@/components/CommonToolBar.vue";
 import CommonForm from "@/components/CommonForm.vue";
-import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import { ccodeService } from "@/api/system/CCode";
-
-// 搜索条件
-const handleSearch = (searchKey) => {
-  console.log("searchKey", searchKey);
-  getTableData(searchKey);
-};
 
 // 通用表单
 const formTitle = ref("日费用记录编辑");
@@ -88,16 +80,17 @@ const formData = ref({
         category: "CATEGORY",
       },
     ],
-    event: {
-      selectChange: (val) => {
-        if (val && val === "UNEXPENSE") {
+    event:{
+      selectChange: (val)=>{
+        if(val && val==='UNEXPENSE'){
           formData.value.expenseContent.required = false;
-          formData.value.expenseContent.value = "";
+          formData.value.expenseContent.value = '';
           formData.value.singleExpense.required = false;
           formData.value.singleExpense.value = 0;
         }
-      },
-    },
+
+      }
+    }
   },
   expenseContent: {
     lable: "消费内容",
@@ -133,7 +126,7 @@ const formData = ref({
 });
 const categoryOptions = ref([]);
 const getCategoryOptions = async () => {
-  const resp = await ccodeService.categorySelector({ category: "EXPENSE" });
+  const resp = await ccodeService.categorySelector({category: "EXPENSE"});
   dataUtils.processRespData(categoryOptions, resp, dataUtils.processMap.NORMAL);
 };
 
@@ -147,11 +140,7 @@ const handleFormData = (data) => {
 
   formData.value.expenseReason.options = [];
   for (let i in categoryOptions.value) {
-    formData.value.expenseReason.options.push({
-      label: categoryOptions.value[i].describe,
-      value: categoryOptions.value[i].code,
-      category: categoryOptions.value[i].category,
-    });
+    formData.value.expenseReason.options.push({ label: categoryOptions.value[i].describe, value:  categoryOptions.value[i].code, category: categoryOptions.value[i].category });
   }
 
   console.log("formData", formData.value);
@@ -374,16 +363,12 @@ const pageParams = ref({
   total: 10,
   page: 10,
 });
-const getTableData = async (key) => {
-  pageParams.value.key = key || "";
+const getTableData = async () => {
   const resp = await dailyExpenseService.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
   for (let i in tableData.value) {
-    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(
-      tableData.value[i].expenseReason,
-      categoryOptions.value
-    );
+    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(tableData.value[i].expenseReason, categoryOptions.value);
   }
 };
 const handleSizeChange = (size) => {

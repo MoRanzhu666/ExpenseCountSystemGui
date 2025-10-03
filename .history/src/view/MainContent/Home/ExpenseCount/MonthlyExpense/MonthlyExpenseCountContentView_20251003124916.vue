@@ -15,10 +15,10 @@
 <script setup>
 // import { userService } from "@/api/User";
 import { dataUtils } from "@/utils/dataUtils";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonSearchForm from "@/components/CommonSearchForm.vue";
-import { monthlyExpenseServiece } from "@/api/expense/MonthlyExpense";
+import { monthlyExpenseServiece } from "@/api/expense/MonthExpense";
 
 
 // 搜索条件
@@ -30,6 +30,25 @@ const handleSearch = (searchKey) => {
 
 // 通用表格
 const selectedRows = ref([]);
+watch(
+  () => selectedRows.value,
+  (newVal) => {
+    if (newVal.length != 1) {
+      disableUpdate();
+    } else {
+      startUpdate();
+    }
+    if (newVal.length < 1) {
+      disableDelete();
+    } else {
+      startDelete();
+    }
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 const handleRowClick = (row) => {
   selectedRows.value = [];
   selectedRows.value.push(row);
@@ -117,7 +136,7 @@ const getTableData = async (key) => {
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
   for (let i in tableData.value) {
-    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(tableData.value[i].expenseReason);
+    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(tableData.value[i].expenseReason, categoryOptions.value);
   }
 };
 const handleSizeChange = (size) => {
@@ -136,6 +155,7 @@ const handleCurrentChange = (current) => {
 // };
 
 const initData = async () => {
+  await getCategoryOptions();
   await getTableData();
 };
 

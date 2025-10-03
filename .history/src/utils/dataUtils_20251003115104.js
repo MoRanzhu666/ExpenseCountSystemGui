@@ -59,6 +59,7 @@ const processMap = {
  * @returns  是否成功
  */
 const handleRespMessage = (resp) => {
+  console.log("resp", resp, resp.code === 200);
   if (resp && resp.code === 200) {
     if (resp.message) ElMessage.success(resp.message);
     return true;
@@ -69,7 +70,7 @@ const handleRespMessage = (resp) => {
 };
 
 /**
- * 格式化日期
+ * 
  * @param {年} year 
  * @param {月} month 
  * @param {日} day 
@@ -81,20 +82,10 @@ const formatDate = (year, month, day) => {
   return `${year}-${m}-${d}`;
 };
 
-const formatExpenseReasonMap = (expenseReason, categoryOptions) => {
-  for (const item of categoryOptions) {
-    if (item.code === expenseReason) {
-      return item.describe;
-    }
-  }
-  return expenseReason;
-}
-
 export const dataUtils = {
   processRespData,
   processRespPageParams,
   processMap,
   handleRespMessage,
   formatDate,
-  formatExpenseReasonMap
 };

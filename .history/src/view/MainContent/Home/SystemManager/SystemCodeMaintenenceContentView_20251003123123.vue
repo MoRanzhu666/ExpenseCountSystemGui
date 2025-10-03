@@ -1,6 +1,13 @@
 <template>
   <common-tool-bar :buttonList="buttonList" />
-  <common-search-form :searchKey="searchKey" :handleSearch="handleSearch"/>
+  <div class="serarchForm">
+    <el-button-group
+      style="display: flex; justify-content: flex-start; padding-bottom: 5px"
+    >
+      <el-input style="width: 10vw" v-model="searchKey">请输入文本</el-input>
+      <el-button type="primary" @click="handleSearch">查询</el-button>
+    </el-button-group>
+  </div>
   <common-table
     :table-data="tableData"
     :table-header-list="tableHeaderList"
@@ -20,62 +27,31 @@
 </template>
 
 <script setup>
-import { dailyExpenseService } from "@/api/expense/DailyExpense";
 // import { userService } from "@/api/User";
 import { dataUtils } from "@/utils/dataUtils";
 import { onMounted, ref, watch } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonToolBar from "@/components/CommonToolBar.vue";
 import CommonForm from "@/components/CommonForm.vue";
-import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import { ccodeService } from "@/api/system/CCode";
 
+
 // 搜索条件
-const handleSearch = (searchKey) => {
-  console.log("searchKey", searchKey);
-  getTableData(searchKey);
+const searchKey = ref("");
+const handleSearch = () => {
+  console.log("searchKey", searchKey.value);
+  getTableData(searchKey.value);
 };
 
 // 通用表单
-const formTitle = ref("日费用记录编辑");
+const formTitle = ref("系统代码编辑");
 const formData = ref({
-  id: {
-    lable: "id",
-    value: "",
-  },
-  // year: {
-  //   lable: "年份",
-  //   value: "",
-  //   type: "number",
-  // },
-  // month: {
-  //   lable: "月份",
-  //   value: "",
-  //   type: "number",
-  // },
-  // day: {
-  //   lable: "日期",
-  //   value: "",
-  //   type: "number",
-  // },
-  date: {
-    lable: "日期",
-    value: "",
-    type: "date",
-    required: true,
-  },
-  singleExpense: {
-    lable: "单次支出",
-    value: "",
-    type: "number",
-    precision: "2",
-    required: true,
-  },
-  expenseReason: {
-    lable: "支出原因",
+  // 分类字段
+  category: {
+    lable: "分类",
     value: "",
     type: "selection",
-    required: true,
+    align: "center",
     options: [
       {
         label: "角色分类",
@@ -88,55 +64,65 @@ const formData = ref({
         category: "CATEGORY",
       },
     ],
-    event: {
-      selectChange: (val) => {
-        if (val && val === "UNEXPENSE") {
-          formData.value.expenseContent.required = false;
-          formData.value.expenseContent.value = "";
-          formData.value.singleExpense.required = false;
-          formData.value.singleExpense.value = 0;
-        }
-      },
-    },
   },
-  expenseContent: {
-    lable: "消费内容",
+
+  // 编码字段
+  code: {
+    lable: "编码",
     value: "",
+    type: "text",
+    align: "center",
     required: true,
   },
-  dailyTotal: {
-    lable: "日消费",
+  // 描述字段
+  describe: {
+    lable: "描述",
     value: "",
-    precision: "2",
-    type: `hidden`,
+    type: "text",
+    align: "center",
+    required: true,
   },
+  // 创建人字段
   createByName: {
     lable: "创建人",
     value: "",
-    type: `hidden`,
+    type: "hidden",
+    align: "center",
   },
+  // 创建时间字段
   createTime: {
     lable: "创建时间",
     value: "",
-    type: `hidden`,
+    type: "hidden",
+    align: "center",
   },
+  // 更新人字段
   updateByName: {
     lable: "更新人",
     value: "",
-    type: `hidden`,
+    type: "hidden",
+    align: "center",
   },
+  // 更新时间字段
   updateTime: {
     lable: "更新时间",
     value: "",
     type: "hidden",
+    align: "center",
+  },
+  id: {
+    lable: "id",
+    value: "",
+    type: "hidden",
+    align: "center",
   },
 });
 const categoryOptions = ref([]);
 const getCategoryOptions = async () => {
-  const resp = await ccodeService.categorySelector({ category: "EXPENSE" });
+  const resp = await ccodeService.categorySelector();
   dataUtils.processRespData(categoryOptions, resp, dataUtils.processMap.NORMAL);
+  console.log("categoryOptions", categoryOptions.value);
 };
-
 const isShowForm = ref(false);
 const handleFormData = (data) => {
   if (formTitle.value.includes("编辑")) {
@@ -145,13 +131,9 @@ const handleFormData = (data) => {
     }
   }
 
-  formData.value.expenseReason.options = [];
+  formData.value.category.options = [];
   for (let i in categoryOptions.value) {
-    formData.value.expenseReason.options.push({
-      label: categoryOptions.value[i].describe,
-      value: categoryOptions.value[i].code,
-      category: categoryOptions.value[i].category,
-    });
+    formData.value.category.options.push({ label: categoryOptions.value[i].describe, value:  categoryOptions.value[i].code, category: categoryOptions.value[i].category });
   }
 
   console.log("formData", formData.value);
@@ -167,13 +149,13 @@ const resetFormData = () => {
 };
 const handleSubmit = async (formData) => {
   if (formData.id) {
-    const resp = await dailyExpenseService.update(formData);
+    const resp = await ccodeService.update(formData);
     if (dataUtils.handleRespMessage(resp)) {
       closeForm();
       initData();
     }
   } else {
-    const resp = await dailyExpenseService.add(formData);
+    const resp = await ccodeService.add(formData);
     if (dataUtils.handleRespMessage(resp)) {
       closeForm();
       initData();
@@ -186,7 +168,7 @@ const handleSubmit = async (formData) => {
 
 // 通用工具栏
 const handlerAdd = () => {
-  formTitle.value = "日费用记录新增";
+  formTitle.value = "系统代码新增";
   resetFormData();
   handleFormData();
   isShowForm.value = true;
@@ -194,13 +176,12 @@ const handlerAdd = () => {
 const handlerUpdate = () => {
   isShowForm.value = true;
   handleFormData(selectedRows.value[0]);
-  formTitle.value = "日费用记录编辑";
+  formTitle.value = "系统代码编辑";
 };
 const handlerDelete = async () => {
-  console.log("delete", selectedRows.value);
   const ids = [];
   selectedRows.value.map((item) => ids.push(item.id));
-  const resp = await dailyExpenseService.deleteByIds({ ids: ids });
+  const resp = await ccodeService.deleteByIds({ ids: ids });
   if (dataUtils.handleRespMessage(resp)) {
     initData();
   }
@@ -276,96 +257,53 @@ const tableData = ref([]);
 const tableHeaderList = ref([
   {
     label: "序号",
-    prop: "index", // 可自定义一个不存在的prop（仅用于标识）
+    prop: "index",
     width: 80,
     align: "center",
-    // 关键：通过formatter结合行索引生成序号（index从0开始，+1变为从1开始）
     formatter: (row, column, cellValue, index) => {
-      return index + 1; // 序号从1开始递增
+      return index + 1;
     },
   },
   // {
   //   label: "ID",
   //   prop: "id",
-  //   width: 80,
+  //   width: 120,
   //   align: "center",
   // },
-
   {
-    label: "年份",
-    prop: "year",
-    width: 80,
+    label: "分类",
+    prop: "category",
     align: "center",
   },
   {
-    label: "月份",
-    prop: "month",
-    width: 80,
+    label: "编码",
+    prop: "code",
     align: "center",
   },
   {
-    label: "日期",
-    prop: "day",
-    width: 80,
+    label: "描述",
+    prop: "describe",
     align: "center",
-  },
-  {
-    label: "单次支出",
-    prop: "singleExpense",
-    width: 120,
-    align: "center",
-    formatter: (row) => `¥${row.singleExpense?.toFixed(2)}`,
-  },
-  {
-    label: "支出原因",
-    prop: "expenseReason",
-    width: 150,
-    align: "center",
-  },
-  {
-    label: "支出内容",
-    prop: "expenseContent",
-    width: 180,
-    align: "center",
-  },
-  {
-    label: "每日总计",
-    prop: "dailyTotal",
-    width: 120,
-    align: "center",
-    formatter: (row) => `¥${row.dailyTotal?.toFixed(2)}`,
   },
   {
     label: "创建人",
     prop: "createByName",
-    width: 120,
     align: "center",
-    type: "slot",
   },
   {
     label: "创建时间",
     prop: "createTime",
     align: "center",
-    // 格式化时间显示（可根据需要自定义）
-    formatter: (row) => {
-      if (!row.createTime) return "";
-      return new Date(row.createTime).toLocaleString();
-    },
   },
   {
     label: "更新人",
     prop: "updateByName",
-    width: 120,
     align: "center",
   },
   {
     label: "更新时间",
     prop: "updateTime",
     align: "center",
-    formatter: (row) => {
-      if (!row.updateTime) return "";
-      return new Date(row.updateTime).toLocaleString();
-    },
   },
 ]);
 const pageParams = ref({
@@ -375,16 +313,10 @@ const pageParams = ref({
   page: 10,
 });
 const getTableData = async (key) => {
-  pageParams.value.key = key || "";
-  const resp = await dailyExpenseService.getPage(pageParams.value);
+    pageParams.value.key = key||'';
+  const resp = await ccodeService.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
-  for (let i in tableData.value) {
-    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(
-      tableData.value[i].expenseReason,
-      categoryOptions.value
-    );
-  }
 };
 const handleSizeChange = (size) => {
   pageParams.value.size = size;
@@ -402,8 +334,8 @@ const handleCurrentChange = (current) => {
 // };
 
 const initData = async () => {
-  await getCategoryOptions();
   await getTableData();
+  await getCategoryOptions();
 };
 
 onMounted(async () => {

@@ -59,6 +59,7 @@ const processMap = {
  * @returns  是否成功
  */
 const handleRespMessage = (resp) => {
+  console.log("resp", resp, resp.code === 200);
   if (resp && resp.code === 200) {
     if (resp.message) ElMessage.success(resp.message);
     return true;

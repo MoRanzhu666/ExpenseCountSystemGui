@@ -29,6 +29,8 @@ import CommonToolBar from "@/components/CommonToolBar.vue";
 import CommonForm from "@/components/CommonForm.vue";
 import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import { ccodeService } from "@/api/system/CCode";
+import { monthlyExpenseServiece } from "@/api/expense/MonthExpense";
+
 
 // 搜索条件
 const handleSearch = (searchKey) => {
@@ -88,16 +90,17 @@ const formData = ref({
         category: "CATEGORY",
       },
     ],
-    event: {
-      selectChange: (val) => {
-        if (val && val === "UNEXPENSE") {
+    event:{
+      selectChange: (val)=>{
+        if(val && val==='UNEXPENSE'){
           formData.value.expenseContent.required = false;
-          formData.value.expenseContent.value = "";
+          formData.value.expenseContent.value = '';
           formData.value.singleExpense.required = false;
           formData.value.singleExpense.value = 0;
         }
-      },
-    },
+
+      }
+    }
   },
   expenseContent: {
     lable: "消费内容",
@@ -133,7 +136,7 @@ const formData = ref({
 });
 const categoryOptions = ref([]);
 const getCategoryOptions = async () => {
-  const resp = await ccodeService.categorySelector({ category: "EXPENSE" });
+  const resp = await ccodeService.categorySelector({category: "EXPENSE"});
   dataUtils.processRespData(categoryOptions, resp, dataUtils.processMap.NORMAL);
 };
 
@@ -147,11 +150,7 @@ const handleFormData = (data) => {
 
   formData.value.expenseReason.options = [];
   for (let i in categoryOptions.value) {
-    formData.value.expenseReason.options.push({
-      label: categoryOptions.value[i].describe,
-      value: categoryOptions.value[i].code,
-      category: categoryOptions.value[i].category,
-    });
+    formData.value.expenseReason.options.push({ label: categoryOptions.value[i].describe, value:  categoryOptions.value[i].code, category: categoryOptions.value[i].category });
   }
 
   console.log("formData", formData.value);
@@ -294,52 +293,24 @@ const tableHeaderList = ref([
   {
     label: "年份",
     prop: "year",
-    width: 80,
     align: "center",
   },
   {
     label: "月份",
     prop: "month",
-    width: 80,
     align: "center",
   },
   {
-    label: "日期",
-    prop: "day",
-    width: 80,
+    label: "月支出",
+    prop: "monthlyTotal",
     align: "center",
-  },
-  {
-    label: "单次支出",
-    prop: "singleExpense",
-    width: 120,
-    align: "center",
-    formatter: (row) => `¥${row.singleExpense?.toFixed(2)}`,
-  },
-  {
-    label: "支出原因",
-    prop: "expenseReason",
-    width: 150,
-    align: "center",
-  },
-  {
-    label: "支出内容",
-    prop: "expenseContent",
-    width: 180,
-    align: "center",
-  },
-  {
-    label: "每日总计",
-    prop: "dailyTotal",
-    width: 120,
-    align: "center",
-    formatter: (row) => `¥${row.dailyTotal?.toFixed(2)}`,
+    formatter: (row) => `¥${row.monthlyTotal?.toFixed(2)}`,
   },
   {
     label: "创建人",
     prop: "createByName",
-    width: 120,
     align: "center",
+    width:120,
     type: "slot",
   },
   {
@@ -376,14 +347,11 @@ const pageParams = ref({
 });
 const getTableData = async (key) => {
   pageParams.value.key = key || "";
-  const resp = await dailyExpenseService.getPage(pageParams.value);
+  const resp = await monthlyExpenseServiece.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
   for (let i in tableData.value) {
-    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(
-      tableData.value[i].expenseReason,
-      categoryOptions.value
-    );
+    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(tableData.value[i].expenseReason, categoryOptions.value);
   }
 };
 const handleSizeChange = (size) => {

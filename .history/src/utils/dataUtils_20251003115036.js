@@ -1,7 +1,7 @@
 import { ElMessage } from "element-plus";
 
 /**
- * 处理响应数据
+ * 
  * @param {表格数据实体} entity 
  * @param {响应体} resp 
  * @param {处理数据方式} pm 
@@ -59,6 +59,7 @@ const processMap = {
  * @returns  是否成功
  */
 const handleRespMessage = (resp) => {
+  console.log("resp", resp, resp.code === 200);
   if (resp && resp.code === 200) {
     if (resp.message) ElMessage.success(resp.message);
     return true;
@@ -68,27 +69,11 @@ const handleRespMessage = (resp) => {
   }
 };
 
-/**
- * 格式化日期
- * @param {年} year 
- * @param {月} month 
- * @param {日} day 
- * @returns 由"YYYY-MM-DD"格式组成的日期字符串
- */
 const formatDate = (year, month, day) => {
   const m = month < 10 ? `0${month}` : month;
   const d = day < 10 ? `0${day}` : day;
   return `${year}-${m}-${d}`;
 };
-
-const formatExpenseReasonMap = (expenseReason, categoryOptions) => {
-  for (const item of categoryOptions) {
-    if (item.code === expenseReason) {
-      return item.describe;
-    }
-  }
-  return expenseReason;
-}
 
 export const dataUtils = {
   processRespData,
@@ -96,5 +81,4 @@ export const dataUtils = {
   processMap,
   handleRespMessage,
   formatDate,
-  formatExpenseReasonMap
 };

@@ -27,13 +27,13 @@ import { onMounted, ref, watch } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonToolBar from "@/components/CommonToolBar.vue";
 import CommonForm from "@/components/CommonForm.vue";
-import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import { ccodeService } from "@/api/system/CCode";
 
 // 搜索条件
-const handleSearch = (searchKey) => {
-  console.log("searchKey", searchKey);
-  getTableData(searchKey);
+const searchKey = ref("");
+const handleSearch = () => {
+  console.log("searchKey", searchKey.value);
+  getTableData(searchKey.value);
 };
 
 // 通用表单

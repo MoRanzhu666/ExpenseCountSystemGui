@@ -1,6 +1,13 @@
 <template>
   <common-tool-bar :buttonList="buttonList" />
-  <common-search-form :searchKey="searchKey" :handleSearch="handleSearch"/>
+  <div class="serarchForm">
+    <el-button-group
+      style="display: flex; justify-content: flex-start; padding-bottom: 5px"
+    >
+      <el-input style="width: 10vw" v-model="searchKey">请输入文本</el-input>
+      <el-button type="primary" @click="handleSearch">查询</el-button>
+    </el-button-group>
+  </div>
   <common-table
     :table-data="tableData"
     :table-header-list="tableHeaderList"
@@ -27,13 +34,13 @@ import { onMounted, ref, watch } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonToolBar from "@/components/CommonToolBar.vue";
 import CommonForm from "@/components/CommonForm.vue";
-import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import { ccodeService } from "@/api/system/CCode";
 
 // 搜索条件
-const handleSearch = (searchKey) => {
-  console.log("searchKey", searchKey);
-  getTableData(searchKey);
+const searchKey = ref("");
+const handleSearch = () => {
+  console.log("searchKey", searchKey.value);
+  getTableData(searchKey.value);
 };
 
 // 通用表单
@@ -375,7 +382,7 @@ const pageParams = ref({
   page: 10,
 });
 const getTableData = async (key) => {
-  pageParams.value.key = key || "";
+ pageParams.value.key = key || "";
   const resp = await dailyExpenseService.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);

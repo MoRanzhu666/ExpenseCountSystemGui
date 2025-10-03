@@ -1,15 +1,16 @@
 // import axios from "axios";
-import request from "@/request/requst";
+import request from "../request/requst";
 
 const baseUrl = process.env.VUE_APP_BASE_URL;
-
+/**
+ * axios响应：resp.data 中存储的才是实际响应
+ */
 const getPage = (data) => {
   return request
-    .get(baseUrl + "/system/c_code/getPage", {
+    .get(baseUrl + "/dailyExpenses/getPage", {
       params: {
         current: data.current,
         size: data.size,
-        key: data.key ,
       },
     })
     .then((resp) => {
@@ -18,20 +19,32 @@ const getPage = (data) => {
 };
 
 const add = (data) => {
-  return request.post(baseUrl + "/system/c_code/add", data).then((resp) => {
+  return request.post(baseUrl + "/dailyExpenses/add", data).then((resp) => {
     return resp;
   });
 };
 
 const update = (data) => {
-  return request.put(baseUrl + "/system/c_code/update", data).then((resp) => {
+  return request.put(baseUrl + "/dailyExpenses/update", data).then((resp) => {
     return resp;
   });
 };
 
+const deleteById = (data) => {
+  return request
+    .delete(baseUrl + "/dailyExpenses/deleteById", {
+      params: {
+        id: data.id,
+      },
+    })
+    .then((resp) => {
+      return resp;
+    });
+};
+
 const deleteByIds = (data) => {
   return request
-    .delete(baseUrl + "/system/c_code/deleteByIds", {
+    .delete(baseUrl + "/dailyExpenses/deleteByIds", {
       params: {
         ids: data.ids,
       },
@@ -41,22 +54,10 @@ const deleteByIds = (data) => {
     });
 };
 
-const categorySelector = (data) => {
-  return request
-    .get(baseUrl + "/system/c_code/categorySelector", {
-      params: {
-        category: data ? (data.category ? data.category : "") : "",
-      },
-    })
-    .then((resp) => {
-      return resp;
-    });
-};
-
-export const ccodeService = {
+export const dailyExpenseService = {
   getPage,
   add,
   update,
+  deleteById,
   deleteByIds,
-  categorySelector,
 };

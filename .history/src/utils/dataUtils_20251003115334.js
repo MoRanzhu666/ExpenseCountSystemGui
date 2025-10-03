@@ -59,6 +59,7 @@ const processMap = {
  * @returns  是否成功
  */
 const handleRespMessage = (resp) => {
+  console.log("resp", resp, resp.code === 200);
   if (resp && resp.code === 200) {
     if (resp.message) ElMessage.success(resp.message);
     return true;
@@ -81,13 +82,11 @@ const formatDate = (year, month, day) => {
   return `${year}-${m}-${d}`;
 };
 
-const formatExpenseReasonMap = (expenseReason, categoryOptions) => {
-  for (const item of categoryOptions) {
-    if (item.code === expenseReason) {
-      return item.describe;
+const formatExpenseReasonMap = (expenseReason, map) => {
+  for (const item of map) {
+    if (item.value === expenseReason) {
+      return item.label;
     }
-  }
-  return expenseReason;
 }
 
 export const dataUtils = {
@@ -96,5 +95,4 @@ export const dataUtils = {
   processMap,
   handleRespMessage,
   formatDate,
-  formatExpenseReasonMap
 };

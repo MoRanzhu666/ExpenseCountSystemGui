@@ -59,6 +59,7 @@ const processMap = {
  * @returns  是否成功
  */
 const handleRespMessage = (resp) => {
+  console.log("resp", resp, resp.code === 200);
   if (resp && resp.code === 200) {
     if (resp.message) ElMessage.success(resp.message);
     return true;
@@ -82,7 +83,9 @@ const formatDate = (year, month, day) => {
 };
 
 const formatExpenseReasonMap = (expenseReason, categoryOptions) => {
+  console.log("expenseReason", expenseReason, categoryOptions);
   for (const item of categoryOptions) {
+    console.log("item", item.code, expenseReason);
     if (item.code === expenseReason) {
       return item.describe;
     }

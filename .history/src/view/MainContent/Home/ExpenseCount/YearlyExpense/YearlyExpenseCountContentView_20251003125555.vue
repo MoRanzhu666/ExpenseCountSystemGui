@@ -18,7 +18,7 @@ import { dataUtils } from "@/utils/dataUtils";
 import { onMounted, ref } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonSearchForm from "@/components/CommonSearchForm.vue";
-import { monthlyExpenseServiece } from "@/api/expense/MonthlyExpense";
+import { yearlyExpenseServiece } from "@/api/expense/YearlyExpense";
 
 
 // 搜索条件
@@ -62,13 +62,8 @@ const tableHeaderList = ref([
     align: "center",
   },
   {
-    label: "月份",
-    prop: "month",
-    align: "center",
-  },
-  {
-    label: "月支出",
-    prop: "monthlyTotal",
+    label: "年支出",
+    prop: "yearlyTotal",
     align: "center",
     formatter: (row) => `¥${row.monthlyTotal?.toFixed(2)}`,
   },
@@ -113,7 +108,7 @@ const pageParams = ref({
 });
 const getTableData = async (key) => {
   pageParams.value.key = key || "";
-  const resp = await monthlyExpenseServiece.getPage(pageParams.value);
+  const resp = await yearlyExpenseServiece.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
   for (let i in tableData.value) {

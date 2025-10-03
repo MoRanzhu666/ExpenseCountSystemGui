@@ -33,7 +33,7 @@ import { ccodeService } from "@/api/system/CCode";
 // 搜索条件
 const handleSearch = (searchKey) => {
   console.log("searchKey", searchKey);
-  getTableData(searchKey);
+  getTableData(searchKey.value);
 };
 
 // 通用表单

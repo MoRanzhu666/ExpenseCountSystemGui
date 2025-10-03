@@ -31,9 +31,10 @@ import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import { ccodeService } from "@/api/system/CCode";
 
 // 搜索条件
-const handleSearch = (searchKey) => {
-  console.log("searchKey", searchKey);
-  getTableData(searchKey);
+const searchKey = ref("");
+const handleSearch = () => {
+  console.log("searchKey", searchKey.value);
+  getTableData(searchKey.value);
 };
 
 // 通用表单

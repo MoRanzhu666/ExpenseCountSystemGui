@@ -22,7 +22,6 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  props
 });
 </script>
 

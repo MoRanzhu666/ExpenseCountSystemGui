@@ -18,7 +18,7 @@ import { dataUtils } from "@/utils/dataUtils";
 import { onMounted, ref } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonSearchForm from "@/components/CommonSearchForm.vue";
-import { monthlyExpenseServiece } from "@/api/expense/MonthlyExpense";
+import { monthlyExpenseServiece } from "@/api/expense/MonthExpense";
 
 
 // 搜索条件
@@ -117,7 +117,7 @@ const getTableData = async (key) => {
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
   for (let i in tableData.value) {
-    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(tableData.value[i].expenseReason);
+    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(tableData.value[i].expenseReason, categoryOptions.value);
   }
 };
 const handleSizeChange = (size) => {
@@ -136,6 +136,7 @@ const handleCurrentChange = (current) => {
 // };
 
 const initData = async () => {
+  await getCategoryOptions();
   await getTableData();
 };
 

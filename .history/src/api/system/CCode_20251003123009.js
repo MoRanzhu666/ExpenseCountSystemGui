@@ -9,7 +9,7 @@ const getPage = (data) => {
       params: {
         current: data.current,
         size: data.size,
-        key: data.key ,
+        key: data.key ? data.key : "",
       },
     })
     .then((resp) => {

@@ -22,7 +22,7 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  props
+  console.log("toolbar", props);
 });
 </script>
 
