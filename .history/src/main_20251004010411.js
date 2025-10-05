@@ -7,10 +7,13 @@ import { ElDropdown, ElDropdownMenu, ElDropdownItem } from "element-plus";
 import axios from "axios";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
+import loadingUtils from "@/utils/loading.js";
+import "./assets/css/loading.css";
 
 const app = createApp(App);
 app.provide("$axios", axios);
 app.use(router);
+app.use(loadingUtils);
 app.use(ElementPlus, {
   locale: zhCn,
 });
