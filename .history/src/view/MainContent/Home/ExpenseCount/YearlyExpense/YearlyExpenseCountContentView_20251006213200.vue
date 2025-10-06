@@ -16,7 +16,7 @@
 <script setup>
 // import { userService } from "@/api/User";
 import { dataUtils } from "@/utils/dataUtils";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import SelectedExpenseComp from "@/components/expense/SelectedExpenseComp.vue";
@@ -36,7 +36,7 @@ const selectedExpense = ref(0);
 watch(selectedRows, (newVal) => {
   let total = 0;
   for (let i in newVal) {
-    total += newVal[i].yearlyTotal || 0;
+    total += newVal[i].monthlyTotal || 0;
   }
   selectedExpense.value = total;
   console.log("selectedRows", newVal);

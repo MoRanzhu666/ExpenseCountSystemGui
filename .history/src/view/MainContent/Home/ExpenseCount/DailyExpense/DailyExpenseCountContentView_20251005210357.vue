@@ -10,7 +10,9 @@
     @update:size="(val) => handleSizeChange(val)"
     @update:current="(val) => handleCurrentChange(val)"
   />
-  <selected-expense-comp :selectedExpense="selectedExpense"/>
+  <div style="font-size: 12px; color: #333; ">
+    日合计:{{ selectedExpense.dailyExpense }} || 月合计:{{ selectedExpense.monthlyExpense }} || 年合计:{{ selectedExpense.yearlyExpense }}
+  </div>
   <common-form
     :form-data="formData"
     :form-title="formTitle"
@@ -29,7 +31,6 @@ import CommonTable from "@/components/CommonTable.vue";
 import CommonToolBar from "@/components/CommonToolBar.vue";
 import CommonForm from "@/components/CommonForm.vue";
 import CommonSearchForm from "@/components/CommonSearchForm.vue";
-import SelectedExpenseComp from "@/components/expense/SelectedExpenseComp.vue";
 import { ccodeService } from "@/api/system/CCode";
 
 // 搜索条件
@@ -248,7 +249,11 @@ const buttonList = ref({
 
 // 通用表格
 const selectedRows = ref([]);
-const selectedExpense = ref(0)
+const selectedExpense = ref({
+  dailyExpense:0,
+  monthlyExpense:0,
+  yearlyExpense:0,
+})
 watch(
   () => selectedRows.value,
   (newVal) => {
@@ -262,12 +267,6 @@ watch(
     } else {
       startDelete();
     }
-
-    let total = 0;
-    for (let i in newVal) {
-      total += newVal[i].singleExpense || 0;
-    }
-    selectedExpense.value = total;
   },
   {
     immediate: true,

@@ -1,7 +1,5 @@
 <template>
-  <div style="color: #666;">
-      ECS费用统计系统
-  </div>
+  <div>版权归属Lyrics</div>
 </template>
 
 <script setup>

@@ -36,7 +36,7 @@ const selectedExpense = ref(0);
 watch(selectedRows, (newVal) => {
   let total = 0;
   for (let i in newVal) {
-    total += newVal[i].yearlyTotal || 0;
+    total += newVal[i].monthlyTotal || 0;
   }
   selectedExpense.value = total;
   console.log("selectedRows", newVal);

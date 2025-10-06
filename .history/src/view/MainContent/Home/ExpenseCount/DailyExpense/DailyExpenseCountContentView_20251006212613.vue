@@ -10,7 +10,7 @@
     @update:size="(val) => handleSizeChange(val)"
     @update:current="(val) => handleCurrentChange(val)"
   />
-  <selected-expense-comp :selectedExpense="selectedExpense"/>
+  <selected-expense :selectedExpense="selectedExpense"/>
   <common-form
     :form-data="formData"
     :form-title="formTitle"
@@ -29,7 +29,7 @@ import CommonTable from "@/components/CommonTable.vue";
 import CommonToolBar from "@/components/CommonToolBar.vue";
 import CommonForm from "@/components/CommonForm.vue";
 import CommonSearchForm from "@/components/CommonSearchForm.vue";
-import SelectedExpenseComp from "@/components/expense/SelectedExpenseComp.vue";
+import SelectedExpense from "@/components/expense/SelectedExpense.vue";
 import { ccodeService } from "@/api/system/CCode";
 
 // 搜索条件
@@ -262,12 +262,6 @@ watch(
     } else {
       startDelete();
     }
-
-    let total = 0;
-    for (let i in newVal) {
-      total += newVal[i].singleExpense || 0;
-    }
-    selectedExpense.value = total;
   },
   {
     immediate: true,

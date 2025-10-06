@@ -1,6 +1,8 @@
 <template>
-  <div style="color: #666;">
-      ECS费用统计系统
+  <div>
+    <el-p>
+      费用统计系统
+    </el-p>
   </div>
 </template>
 

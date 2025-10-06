@@ -262,12 +262,6 @@ watch(
     } else {
       startDelete();
     }
-
-    let total = 0;
-    for (let i in newVal) {
-      total += newVal[i].singleExpense || 0;
-    }
-    selectedExpense.value = total;
   },
   {
     immediate: true,

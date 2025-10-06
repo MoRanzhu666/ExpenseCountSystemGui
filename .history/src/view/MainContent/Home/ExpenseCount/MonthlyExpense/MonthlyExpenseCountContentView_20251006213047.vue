@@ -11,6 +11,7 @@
   />
   <selected-expense-comp :selectedExpense="selectedExpense"/>
   
+  
 </template>
 
 <script setup>
@@ -20,7 +21,7 @@ import { onMounted, ref, watch } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import SelectedExpenseComp from "@/components/expense/SelectedExpenseComp.vue";
-import { yearlyExpenseServiece } from "@/api/expense/YearlyExpense";
+import { monthlyExpenseServiece } from "@/api/expense/MonthlyExpense";
 
 
 // 搜索条件
@@ -34,11 +35,7 @@ const handleSearch = (searchKey) => {
 const selectedRows = ref([]);
 const selectedExpense = ref(0);
 watch(selectedRows, (newVal) => {
-  let total = 0;
-  for (let i in newVal) {
-    total += newVal[i].yearlyTotal || 0;
-  }
-  selectedExpense.value = total;
+  
   console.log("selectedRows", newVal);
 });
 const handleRowClick = (row) => {
@@ -73,10 +70,15 @@ const tableHeaderList = ref([
     align: "center",
   },
   {
-    label: "年支出",
-    prop: "yearlyTotal",
+    label: "月份",
+    prop: "month",
     align: "center",
-    formatter: (row) => `¥${row.yearlyTotal?.toFixed(2)}`,
+  },
+  {
+    label: "月支出",
+    prop: "monthlyTotal",
+    align: "center",
+    formatter: (row) => `¥${row.monthlyTotal?.toFixed(2)}`,
   },
   {
     label: "创建人",
@@ -119,7 +121,7 @@ const pageParams = ref({
 });
 const getTableData = async (key) => {
   pageParams.value.key = key || "";
-  const resp = await yearlyExpenseServiece.getPage(pageParams.value);
+  const resp = await monthlyExpenseServiece.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
   for (let i in tableData.value) {
