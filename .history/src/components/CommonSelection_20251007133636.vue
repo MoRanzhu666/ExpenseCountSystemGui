@@ -2,11 +2,10 @@
   <div class="common-selection">
     <el-select
       v-model="modelValue"
-      :placeholder="optionPlaceholder"
+      :placeholder="option.placeholder ? option.placeholder : ' 请选择'"
       filterable
       :filter-method="handleFilter"
       default-first-option
-      clearable
       @change="handleChange"
     >
       <el-option
@@ -26,7 +25,6 @@ import { computed, onMounted, ref } from "vue";
 const props = defineProps({
   modelValue: [String, Number, Object], // 支持多种类型
   options: { type: Array, default: () => [] },
-  optionPlaceholder: { type: String, default: "请选择" },
   selectChange: Function,
 });
 

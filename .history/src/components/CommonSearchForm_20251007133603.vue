@@ -11,9 +11,7 @@
       >
       <common-selection
         v-model="searchCategory"
-        v-if="categoryOptions.length > 0"
-        :options="processCategoryOptions(categoryOptions)"
-        :option-placeholder="'类别'"
+        :options="categoryOptions"
         style="width: 5vw;"
       />
       <el-button
@@ -41,13 +39,6 @@ const props = defineProps({
 });
 const searchKey = ref("");
 const searchCategory = ref("");
-
-const processCategoryOptions = (options) => {
-  return options.map((opt) => ({
-    value: opt.code,
-    label: opt.describe,
-  }));
-};
 
 onMounted(() => {
   console.log("categoryOptions", props.categoryOptions);

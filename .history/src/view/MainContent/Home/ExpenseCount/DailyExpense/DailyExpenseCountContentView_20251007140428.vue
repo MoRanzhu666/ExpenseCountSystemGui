@@ -300,8 +300,10 @@ const processTableHeaderListFilter = () => {
       value: categoryOptions.value[i].code,
     });
   }
+  console.log("tableHeaderListFilter", tableHeaderListFilter.value);
   tableHeaderList.value.find((item) => item.prop === "expenseReason").filters =
     tableHeaderListFilter.value.expenseReasonFilter;
+  console.log("tableHeaderList", tableHeaderList.value);
 };
 const tableHeaderList = ref([
   {

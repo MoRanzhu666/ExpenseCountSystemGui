@@ -6,7 +6,6 @@
       filterable
       :filter-method="handleFilter"
       default-first-option
-      clearable
       @change="handleChange"
     >
       <el-option

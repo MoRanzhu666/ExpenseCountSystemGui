@@ -9,13 +9,14 @@
         @keydown.enter="handleSearch(searchKey)"
         >请输入文本</el-input
       >
-      <common-selection
-        v-model="searchCategory"
-        v-if="categoryOptions.length > 0"
-        :options="processCategoryOptions(categoryOptions)"
-        :option-placeholder="'类别'"
-        style="width: 5vw;"
-      />
+      <el-select v-model="value" placeholder="Select" style="width: 240px">
+        <el-option
+          v-for="item in categoryOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
       <el-button
         type="primary"
         @click="handleSearch({ searchKey, searchCategory })"
@@ -27,7 +28,6 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import CommonSelection from "@/components/CommonSelection.vue";
 
 const props = defineProps({
   handleSearch: {
@@ -41,13 +41,6 @@ const props = defineProps({
 });
 const searchKey = ref("");
 const searchCategory = ref("");
-
-const processCategoryOptions = (options) => {
-  return options.map((opt) => ({
-    value: opt.code,
-    label: opt.describe,
-  }));
-};
 
 onMounted(() => {
   console.log("categoryOptions", props.categoryOptions);

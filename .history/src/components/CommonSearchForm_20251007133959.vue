@@ -11,7 +11,6 @@
       >
       <common-selection
         v-model="searchCategory"
-        v-if="categoryOptions.length > 0"
         :options="processCategoryOptions(categoryOptions)"
         :option-placeholder="'类别'"
         style="width: 5vw;"

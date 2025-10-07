@@ -1,10 +1,6 @@
 <template>
   <common-tool-bar :buttonList="buttonList" />
-  <common-search-form
-    :searchKey="searchKey"
-    :handleSearch="handleSearch"
-    :categoryOptions="categoryOptions"
-  />
+  <common-search-form :searchKey="searchKey" :handleSearch="handleSearch" :categoryOptions="categoryOptions"/>
   <common-table
     :table-data="tableData"
     :table-header-list="tableHeaderList"
@@ -14,7 +10,7 @@
     @update:size="(val) => handleSizeChange(val)"
     @update:current="(val) => handleCurrentChange(val)"
   />
-  <selected-expense-comp :selectedExpense="selectedExpense" />
+  <selected-expense-comp :selectedExpense="selectedExpense"/>
   <common-form
     :form-data="formData"
     :form-title="formTitle"
@@ -39,10 +35,7 @@ import { ccodeService } from "@/api/system/CCode";
 // 搜索条件
 const handleSearch = (searchKey) => {
   console.log("searchKey", searchKey);
-  getTableData({
-    key: searchKey.searchKey,
-    expenseReason: searchKey.searchCategory,
-  });
+  getTableData({key: searchKey.searchKey, expenseReason: searchKey.searchCategory});
 };
 
 // 通用表单
@@ -255,7 +248,7 @@ const buttonList = ref({
 
 // 通用表格
 const selectedRows = ref([]);
-const selectedExpense = ref(0);
+const selectedExpense = ref(0)
 watch(
   () => selectedRows.value,
   (newVal) => {
@@ -290,8 +283,8 @@ const handleSelectionChange = (rows) => {
 };
 const tableData = ref([]);
 const tableHeaderListFilter = ref({
-  expenseReasonFilter: [],
-});
+  expenseReasonFilter:[]
+})
 const processTableHeaderListFilter = () => {
   tableHeaderListFilter.value.expenseReasonFilter = [];
   for (let i in categoryOptions.value) {
@@ -300,8 +293,9 @@ const processTableHeaderListFilter = () => {
       value: categoryOptions.value[i].code,
     });
   }
-  tableHeaderList.value.find((item) => item.prop === "expenseReason").filters =
-    tableHeaderListFilter.value.expenseReasonFilter;
+  console.log("tableHeaderListFilter", tableHeaderListFilter.value);
+  tableHeaderList.value.find(item => item.prop === 'expenseReason').filters = tableHeaderListFilter.value.expenseReasonFilter;
+  console.log("tableHeaderList", tableHeaderList.value)
 };
 const tableHeaderList = ref([
   {
@@ -352,9 +346,7 @@ const tableHeaderList = ref([
     width: 150,
     align: "center",
     filters: tableHeaderListFilter.value.expenseReasonFilter,
-    filterMethod: (value, row) =>
-      row.expenseReason ===
-      dataUtils.formatExpenseReasonMap(value, categoryOptions.value),
+    filterMethod: (value, row) => {row.expenseReason === value; console.log("filter", value, row); return row.expenseReason === value;},
   },
   {
     label: "支出内容",
@@ -439,7 +431,7 @@ const handleCurrentChange = (current) => {
 const initData = async () => {
   await getCategoryOptions();
   await getTableData();
-  processTableHeaderListFilter();
+  processTableHeaderListFilter()
 };
 
 onMounted(async () => {

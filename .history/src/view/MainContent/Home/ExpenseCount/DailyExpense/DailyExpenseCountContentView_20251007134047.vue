@@ -1,10 +1,6 @@
 <template>
   <common-tool-bar :buttonList="buttonList" />
-  <common-search-form
-    :searchKey="searchKey"
-    :handleSearch="handleSearch"
-    :categoryOptions="categoryOptions"
-  />
+  <common-search-form :searchKey="searchKey" :handleSearch="handleSearch" :categoryOptions="categoryOptions"/>
   <common-table
     :table-data="tableData"
     :table-header-list="tableHeaderList"
@@ -14,7 +10,7 @@
     @update:size="(val) => handleSizeChange(val)"
     @update:current="(val) => handleCurrentChange(val)"
   />
-  <selected-expense-comp :selectedExpense="selectedExpense" />
+  <selected-expense-comp :selectedExpense="selectedExpense"/>
   <common-form
     :form-data="formData"
     :form-title="formTitle"
@@ -39,10 +35,7 @@ import { ccodeService } from "@/api/system/CCode";
 // 搜索条件
 const handleSearch = (searchKey) => {
   console.log("searchKey", searchKey);
-  getTableData({
-    key: searchKey.searchKey,
-    expenseReason: searchKey.searchCategory,
-  });
+  getTableData({key: searchKey.searchKey, expenseReason: searchKey.searchCategory});
 };
 
 // 通用表单
@@ -255,7 +248,7 @@ const buttonList = ref({
 
 // 通用表格
 const selectedRows = ref([]);
-const selectedExpense = ref(0);
+const selectedExpense = ref(0)
 watch(
   () => selectedRows.value,
   (newVal) => {
@@ -289,20 +282,6 @@ const handleSelectionChange = (rows) => {
   selectedRows.value = rows;
 };
 const tableData = ref([]);
-const tableHeaderListFilter = ref({
-  expenseReasonFilter: [],
-});
-const processTableHeaderListFilter = () => {
-  tableHeaderListFilter.value.expenseReasonFilter = [];
-  for (let i in categoryOptions.value) {
-    tableHeaderListFilter.value.expenseReasonFilter.push({
-      text: categoryOptions.value[i].describe,
-      value: categoryOptions.value[i].code,
-    });
-  }
-  tableHeaderList.value.find((item) => item.prop === "expenseReason").filters =
-    tableHeaderListFilter.value.expenseReasonFilter;
-};
 const tableHeaderList = ref([
   {
     label: "序号",
@@ -351,10 +330,6 @@ const tableHeaderList = ref([
     prop: "expenseReason",
     width: 150,
     align: "center",
-    filters: tableHeaderListFilter.value.expenseReasonFilter,
-    filterMethod: (value, row) =>
-      row.expenseReason ===
-      dataUtils.formatExpenseReasonMap(value, categoryOptions.value),
   },
   {
     label: "支出内容",
@@ -409,8 +384,7 @@ const pageParams = ref({
   page: 10,
 });
 const getTableData = async (key) => {
-  pageParams.value.key = key?.key || "";
-  pageParams.value.expenseReason = key?.expenseReason || "";
+  pageParams.value.key = key || "";
   const resp = await dailyExpenseService.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
@@ -439,7 +413,6 @@ const handleCurrentChange = (current) => {
 const initData = async () => {
   await getCategoryOptions();
   await getTableData();
-  processTableHeaderListFilter();
 };
 
 onMounted(async () => {

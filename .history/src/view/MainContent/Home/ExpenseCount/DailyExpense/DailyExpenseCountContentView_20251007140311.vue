@@ -300,8 +300,10 @@ const processTableHeaderListFilter = () => {
       value: categoryOptions.value[i].code,
     });
   }
+  console.log("tableHeaderListFilter", tableHeaderListFilter.value);
   tableHeaderList.value.find((item) => item.prop === "expenseReason").filters =
     tableHeaderListFilter.value.expenseReasonFilter;
+  console.log("tableHeaderList", tableHeaderList.value);
 };
 const tableHeaderList = ref([
   {
@@ -352,9 +354,11 @@ const tableHeaderList = ref([
     width: 150,
     align: "center",
     filters: tableHeaderListFilter.value.expenseReasonFilter,
-    filterMethod: (value, row) =>
-      row.expenseReason ===
-      dataUtils.formatExpenseReasonMap(value, categoryOptions.value),
+    filterMethod: (value, row) => {
+      row.expenseReason === value;
+      console.log("filter", value, row);
+      return row.expenseReason === value;
+    },
   },
   {
     label: "支出内容",

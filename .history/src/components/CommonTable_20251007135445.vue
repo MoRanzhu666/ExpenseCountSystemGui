@@ -18,8 +18,6 @@
         :width="item.width"
         :align="item.align"
         :formatter="item.formatter"
-        :filters="item.filters"
-        :filter-method="item.filterMethod"
       />
     </el-table>
     <div class="page-bar">
