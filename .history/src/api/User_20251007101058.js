@@ -17,8 +17,11 @@ const getById = (data) => {
     });
 };
 
-const getUser = async ()=>{
-  return await authService.verify(localStorage.getItem('token'))
+const getUser = ()=>{
+  return authService.verify(localStorage.getItem('token')).then((resp)=>{
+    console.log("verify", resp);
+    return resp;
+  })
 }
 
 export const userService = {

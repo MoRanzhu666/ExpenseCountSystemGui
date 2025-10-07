@@ -12,8 +12,8 @@ const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     // 从本地存储获取token并添加到请求头
-    const token = localStorage.getItem('token');
-    // const token = "387ddf87-aaea-4851-a1ff-66dcea2218b0";
+    // const token = localStorage.getItem('token');
+    const token = "387ddf87-aaea-4851-a1ff-66dcea2218b0";
     if (token) {
       config.headers["token"] = token;
     }

@@ -21,7 +21,6 @@
 
 <script setup>
 import { userService } from "@/api/User";
-import router from "@/router";
 import { dataUtils } from "@/utils/dataUtils";
 import { ElMessage } from "element-plus";
 import { onMounted, ref } from "vue";
@@ -36,8 +35,8 @@ const handleCommand = (command) => {
   if (command === 'logout') {
     ElMessage.success('已退出登录')
     // 这里可以加上清除token、跳转登录页等逻辑
-    localStorage.removeItem('token') 
-    router.push('/loginView') 
+    // localStorage.removeItem('token') 
+    // router.push('/login')
   } else if (command === 'profile') {
     ElMessage.info('跳转到个人中心')
     // router.push('/profile')

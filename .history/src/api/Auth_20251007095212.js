@@ -1,0 +1,16 @@
+import request from "@/utils/requst";
+import axios from "axios";
+
+const baseUrl = process.env.VUE_APP_BASE_URL;
+/**
+ * axios响应：resp.data 中存储的才是实际响应
+ */
+const getById = (data) => {
+  return request.post(baseUrl + "/auth/getById", data).then((resp) => {
+    return resp;
+  });
+};
+
+export const authService = {
+  getById,
+};

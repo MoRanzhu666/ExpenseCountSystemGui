@@ -37,7 +37,7 @@ const handleCommand = (command) => {
     ElMessage.success('已退出登录')
     // 这里可以加上清除token、跳转登录页等逻辑
     localStorage.removeItem('token') 
-    router.push('/loginView') 
+    router.push('/login') 
   } else if (command === 'profile') {
     ElMessage.info('跳转到个人中心')
     // router.push('/profile')

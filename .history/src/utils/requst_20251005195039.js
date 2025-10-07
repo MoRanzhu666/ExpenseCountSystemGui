@@ -12,8 +12,8 @@ const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     // 从本地存储获取token并添加到请求头
-    const token = localStorage.getItem('token');
-    // const token = "387ddf87-aaea-4851-a1ff-66dcea2218b0";
+    // const token = localStorage.getItem('token');
+    const token = "387ddf87-aaea-4851-a1ff-66dcea2218b0";
     if (token) {
       config.headers["token"] = token;
     }
@@ -34,7 +34,7 @@ request.interceptors.response.use(
   (error) => {
     // 全局异常处理
     const { response } = error;
-    console.log("error", response);
+    console.log("error", error);
     if (response) {
       // 处理401未授权异常
       if (response.status === 401) {
@@ -42,8 +42,8 @@ request.interceptors.response.use(
         localStorage.removeItem("token");
         // 记录当前页面地址，登录后可跳转回来
         const currentPath = router.currentRoute.value.fullPath;
-        if (currentPath !== "/loginView") {
-          router.push(`/loginView?redirect=${currentPath}`);
+        if (currentPath !== "/login") {
+          router.push(`/login?redirect=${currentPath}`);
         }
         // 显示错误提示
         ElMessage.error("登录已过期，请重新登录");
