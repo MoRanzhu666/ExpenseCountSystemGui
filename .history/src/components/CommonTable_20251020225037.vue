@@ -73,7 +73,7 @@ const getColumnWidth = (column) => {
   const baseWidth = column.width || 120;
   
   if (windowWidth.value < 480) {
-    return Math.max(55, baseWidth * 0.6); // 超小屏幕
+    return Math.max(60, baseWidth * 0.6); // 超小屏幕
   } else if (windowWidth.value < 768) {
     return Math.max(100, baseWidth * 0.8); // 小屏幕
   } else if (windowWidth.value < 992) {

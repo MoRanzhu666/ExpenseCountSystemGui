@@ -1,7 +1,7 @@
 <template>
   <div style="color: #666; width: 100vw">
     <el-row :gutter="40">
-      <el-col :xs="20" :sm="20" :md="20" :lg="22" :xl="22">
+      <el-col :xs="22" :sm="22" :md="20" :lg="20" :xl="20">
         ECS费用统计系统
       </el-col>
       <el-col :span="2" style="display: flex; justify-content: flex-end">

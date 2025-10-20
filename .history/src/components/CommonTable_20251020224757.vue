@@ -73,7 +73,7 @@ const getColumnWidth = (column) => {
   const baseWidth = column.width || 120;
   
   if (windowWidth.value < 480) {
-    return Math.max(55, baseWidth * 0.6); // 超小屏幕
+    return Math.max(80, baseWidth * 0.6); // 超小屏幕
   } else if (windowWidth.value < 768) {
     return Math.max(100, baseWidth * 0.8); // 小屏幕
   } else if (windowWidth.value < 992) {
@@ -126,7 +126,7 @@ const handleRowClickDefault = (row) => {
 <style scoped>
 .table-container {
   width: 100%;
-  height: 60vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -135,6 +135,7 @@ const handleRowClickDefault = (row) => {
   flex: 1;
   overflow: hidden;
   margin-bottom: 16px;
+  height: 60vh;
 }
 
 .pagination-container {

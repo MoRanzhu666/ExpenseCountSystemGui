@@ -1,9 +1,9 @@
 <template>
   <div style="color: #666; width: 100vw">
     <el-row :gutter="40">
-      <el-col :xs="20" :sm="20" :md="20" :lg="22" :xl="22">
-        ECS费用统计系统
-      </el-col>
+      <el-col ::span="{ xs: 22, sm: 22, md: 20 ,lg: 20, xl: 18 }">
+        ECS费用统计系统</el-col
+      >
       <el-col :span="2" style="display: flex; justify-content: flex-end">
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link" style="cursor: pointer">
