@@ -203,8 +203,8 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   .common_form {
-    width: 80vw;
-    height: 60vh;
+    width: 100vw;
+    height: 100vh;
     max-height: 100vh;
     border-radius: 0;
     margin: 0;
