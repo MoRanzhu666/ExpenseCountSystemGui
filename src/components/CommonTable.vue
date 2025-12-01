@@ -1,5 +1,5 @@
 <template>
-  <div class="table-container">
+  <div class="table-container" :style="'height:'+tableHeight">
     <div class="table-wrapper">
       <el-table
         ref="tableRef"
@@ -64,7 +64,7 @@ const windowWidth = ref(window.innerWidth);
 // 响应式表格高度
 const tableHeight = computed(() => {
   if (windowWidth.value < 768) return '60vh'; // 移动端减少高度
-  return '90vh'; // 桌面端保持原高度
+  return '80vh'; // 桌面端保持原高度
 });
 
 // 响应式列宽计算
@@ -125,7 +125,6 @@ const handleRowClickDefault = (row) => {
 <style scoped>
 .table-container {
   width: 100%;
-  height: 80vh;
   display: flex;
   flex-direction: column;
 }
