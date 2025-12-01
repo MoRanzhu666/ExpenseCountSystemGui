@@ -16,10 +16,9 @@
       </el-col>
 
       <!-- 类别选择 -->
-      <el-col :xs="12" :sm="6" :md="5" :lg="2" :xl="2">
+      <el-col :xs="12" :sm="6" :md="5" :lg="2" :xl="2" v-if="categoryOptions.length > 0">
         <common-selection
           v-model="searchCategory"
-          v-if="categoryOptions.length > 0"
           :options="processCategoryOptions(categoryOptions)"
           :option-placeholder="'类别'"
           clearable
