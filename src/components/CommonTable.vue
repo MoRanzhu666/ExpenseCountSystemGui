@@ -63,7 +63,7 @@ const windowWidth = ref(window.innerWidth);
 
 // 响应式表格高度
 const tableHeight = computed(() => {
-  if (windowWidth.value < 768) return '60vh'; // 移动端减少高度
+  if (windowWidth.value < 768) return '55vh'; // 移动端减少高度
   return '80vh'; // 桌面端保持原高度
 });
 
