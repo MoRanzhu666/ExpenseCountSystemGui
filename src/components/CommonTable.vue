@@ -6,10 +6,9 @@
         :data="tableData"
         border
         :row-key="(row) => row.id"
-        :height="tableHeight"
         @selection-change="handleSelectionChangeDefault"
         @row-click="handleRowClickDefault"
-        style="width: 100%"
+        :style="'width: 100%; height: ' + tableHeight + ';'"
       >
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column
@@ -64,8 +63,8 @@ const windowWidth = ref(window.innerWidth);
 
 // 响应式表格高度
 const tableHeight = computed(() => {
-  if (windowWidth.value < 768) return '50vh'; // 移动端减少高度
-  return '70vh'; // 桌面端保持原高度
+  if (windowWidth.value < 768) return '80vh'; // 移动端减少高度
+  return '90vh'; // 桌面端保持原高度
 });
 
 // 响应式列宽计算
@@ -126,7 +125,7 @@ const handleRowClickDefault = (row) => {
 <style scoped>
 .table-container {
   width: 100%;
-  height: 60vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
 }

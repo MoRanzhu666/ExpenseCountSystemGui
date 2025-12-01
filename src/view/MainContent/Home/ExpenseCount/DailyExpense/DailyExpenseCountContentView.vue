@@ -420,6 +420,12 @@ const getTableData = async (key) => {
       categoryOptions.value
     );
   }
+
+  // 格式化日期
+  for(let i in tableData.value){
+    tableData.value[i].date = tableData.value[i].year + '-' + (tableData.value[i].month <10 ? '0' + tableData.value[i].month : tableData.value[i].month) + '-' + (tableData.value[i].day <10 ? '0' + tableData.value[i].day : tableData.value[i].day);
+  }
+
 };
 const handleSizeChange = (size) => {
   pageParams.value.size = size;

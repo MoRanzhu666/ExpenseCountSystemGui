@@ -54,7 +54,7 @@ const filteredOptions = computed(() => {
 const modelValue = computed({
   get: () => {
     return props.options.find((item) => {
-      if (item.value === props.modelValue) {
+      if (item.label === props.modelValue) {
         return item.label;
       }
     });

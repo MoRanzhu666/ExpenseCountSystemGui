@@ -31,10 +31,11 @@
           >
             <common-selection
               v-if="item.type == 'selection'"
-              v-model="submitFormData[index]"
+              :model-value="submitFormData[index]"
               :options="item.options"
               :selectChange="item.event?.selectChange"
               @update:rules="generateRules"
+              @update:modelValue="(val) => (submitFormData[index] = val)"
             />
 
             <el-input
@@ -145,6 +146,7 @@ const handleKeydown = (event) => {
 
 onMounted(() => {
   document.addEventListener('keydown', handleKeydown);
+  console.log(props.formData);
 });
 
 // 清理事件监听
