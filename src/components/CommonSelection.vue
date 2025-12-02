@@ -54,9 +54,8 @@ const filteredOptions = computed(() => {
 const modelValue = computed({
   get: () => {
     return props.options.find((item) => {
-      if (item.label === props.modelValue) {
-        return item.label;
-      }
+      const isChinese = /[\u4e00-\u9fa5]/.test(props.modelValue);
+      return isChinese ? item.label === props.modelValue : item.value === props.modelValue;
     });
   },
   set: (val) => emit("update:modelValue", val),

@@ -174,15 +174,20 @@ const resetFormData = () => {
     formData.value[i].value = "";
   }
 };
-const handleSubmit = async (formData) => {
-  if (formData.id) {
-    const resp = await dailyExpenseService.update(formData);
+const handleSubmit = async (submitData) => {
+  if (submitData.id) {
+    let result =  formData.value.expenseReason.options.find((item) => {
+      const isChinese = /[\u4e00-\u9fa5]/.test(submitData.expenseReason);
+      return isChinese ? item.label === submitData.expenseReason : item.value === submitData.expenseReason;
+    });
+    submitData.expenseReason = result ? result.value : submitData.expenseReason;
+    const resp = await dailyExpenseService.update(submitData);
     if (dataUtils.handleRespMessage(resp)) {
       closeForm();
       initData();
     }
   } else {
-    const resp = await dailyExpenseService.add(formData);
+    const resp = await dailyExpenseService.add(submitData);
     if (dataUtils.handleRespMessage(resp)) {
       closeForm();
       initData();
