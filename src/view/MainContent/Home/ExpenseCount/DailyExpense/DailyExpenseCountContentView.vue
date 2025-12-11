@@ -3,7 +3,7 @@
   <common-search-form
     :searchKey="searchKey"
     :handleSearch="handleSearch"
-    :categoryOptions="categoryOptions"
+    :custom-conditon="{categoryOptions, yearList, monthList, dayList}"
   />
   <common-table
     :table-data="tableData"
@@ -44,6 +44,19 @@ const handleSearch = (searchKey) => {
     expenseReason: searchKey.searchCategory,
   });
 };
+const yearList = ref([])
+const monthList = ref([])
+const generateYearListAndMonthList = () => {
+  for (let index = 2026; index > 2000; index--) {
+    yearList.value.push({label:index,value:index})
+  }
+  
+  for (let index = 1; index < 13; index++) {
+    monthList.value.push({label:index,value:index})
+  }
+}
+
+
 
 // 通用表单
 const formTitle = ref("日费用记录编辑");
@@ -455,6 +468,7 @@ const initData = async () => {
 
 onMounted(async () => {
   await initData();
+  generateYearListAndMonthList()
 });
 </script>
 

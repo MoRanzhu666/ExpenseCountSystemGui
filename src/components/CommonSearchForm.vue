@@ -2,10 +2,10 @@
   <div class="searchForm">
     <el-row :gutter="[10, 10]" class="search-row">
       <!-- 搜索输入框 -->
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="2">
         <el-input
-          v-model="searchKey"
-          @keydown.enter="handleSearch({ searchKey, searchCategory })"
+          v-model="searchInfo.searchKey"
+          @keydown.enter="handleSearch(searchInfo)"
           placeholder="请输入文本"
           clearable
         >
@@ -16,20 +16,38 @@
       </el-col>
 
       <!-- 类别选择 -->
-      <el-col :xs="12" :sm="6" :md="5" :lg="2" :xl="2" v-if="categoryOptions.length > 0">
+      <el-col :xs="12" :sm="6" :md="5" :lg="2" :xl="2" v-if="customConditon">
         <common-selection
-          v-model="searchCategory"
-          :options="processCategoryOptions(categoryOptions)"
-          :option-placeholder="'类别'"
+          v-if="customConditon.yearList.length > 0"
+          v-model="searchInfo.searchYear"
+          :options="customConditon.yearList"
+          :option-placeholder="'年份'"
           clearable
         />
       </el-col>
+      <el-col :xs="12" :sm="6" :md="5" :lg="2" :xl="2" v-if="customConditon"
+        ><common-selection
+          v-if="customConditon.monthList.length > 0"
+          v-model="searchInfo.searchMonth"
+          :options="customConditon.monthList"
+          :option-placeholder="'月份'"
+          clea
+          rable
+      /></el-col>
+      <el-col :xs="12" :sm="6" :md="5" :lg="2" :xl="2" v-if="customConditon">
+        <common-selection
+          v-if="customConditon.categoryOptions.length > 0"
+          v-model="searchInfo.searchCategory"
+          :options="processCategoryOptions(customConditon.categoryOptions)"
+          :option-placeholder="'类别'"
+          clearable
+      /></el-col>
 
       <!-- 查询按钮 -->
       <el-col :xs="12" :sm="6" :md="4" :lg="3" :xl="3">
-        <el-button 
-          type="primary" 
-          @click="handleSearch({ searchKey, searchCategory })"
+        <el-button
+          type="primary"
+          @click="handleSearch(searchInfo)"
           style="width: 100%"
         >
           查询
@@ -41,7 +59,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { Search } from '@element-plus/icons-vue';
+import { Search } from "@element-plus/icons-vue";
 import CommonSelection from "@/components/CommonSelection.vue";
 
 const props = defineProps({
@@ -49,14 +67,18 @@ const props = defineProps({
     type: Function,
     required: true,
   },
-  categoryOptions: {
-    type: Array,
-    default: () => [],
+  customConditon: {
+    type: Object,
   },
+  // categoryOptions: {
+  //   type: Array,
+  //   default: () => [],
+  // },
 });
 
-const searchKey = ref("");
-const searchCategory = ref("");
+const searchInfo = ref({
+  searchKey: "",
+});
 
 const processCategoryOptions = (options) => {
   return options.map((opt) => ({
@@ -87,7 +109,7 @@ onMounted(() => {
   .searchForm {
     padding: 8px 0;
   }
-  
+
   :deep(.el-col) {
     margin-bottom: 8px;
   }
@@ -98,11 +120,11 @@ onMounted(() => {
   .searchForm {
     padding: 5px 0;
   }
-  
+
   :deep(.el-input) {
     font-size: 14px;
   }
-  
+
   :deep(.el-button) {
     font-size: 14px;
     padding: 8px 12px;
