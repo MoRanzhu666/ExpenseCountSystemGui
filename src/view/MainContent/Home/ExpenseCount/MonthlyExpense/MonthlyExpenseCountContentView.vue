@@ -49,54 +49,107 @@ const tableData = ref([]);
 const tableHeaderList = ref([
   {
     label: "序号",
-    prop: "index", // 可自定义一个不存在的prop（仅用于标识）
+    prop: "index",
     width: 80,
     align: "center",
-    // 关键：通过formatter结合行索引生成序号（index从0开始，+1变为从1开始）
     formatter: (row, column, cellValue, index) => {
-      return index + 1; // 序号从1开始递增
+      return index + 1;
     },
   },
   // {
   //   label: "ID",
   //   prop: "id",
-  //   width: 80,
+  //   width: 100,
   //   align: "center",
   // },
-
   {
     label: "年份",
     prop: "year",
+    width: 100,
     align: "center",
   },
   {
     label: "月份",
     prop: "month",
+    width: 100,
     align: "center",
   },
   {
-    label: "月支出",
+    label: "月支出总额",
     prop: "monthlyTotal",
+    width: 120,
     align: "center",
-    formatter: (row) => `¥${row.monthlyTotal?.toFixed(2)}`,
+    formatter: (row) => `¥${row.monthlyTotal?.toFixed(2) || '0.00'}`,
   },
+  {
+    label: "平均支出",
+    prop: "averageExpenses",
+    width: 120,
+    align: "center",
+    formatter: (row) => `¥${row.averageExpenses?.toFixed(2) || '0.00'}`,
+  },
+  {
+    label: "支出笔数",
+    prop: "countExpenses",
+    width: 100,
+    align: "center",
+  },
+  {
+    label: "最高支出",
+    prop: "maxExpenses",
+    width: 120,
+    align: "center",
+    formatter: (row) => `¥${row.maxExpenses?.toFixed(2) || '0.00'}`,
+  },
+  {
+    label: "次高支出",
+    prop: "secondMaxExpenses",
+    width: 120,
+    align: "center",
+    formatter: (row) => `¥${row.secondMaxExpenses?.toFixed(2) || '0.00'}`,
+  },
+  {
+    label: "最低支出",
+    prop: "minExpenses",
+    width: 120,
+    align: "center",
+    formatter: (row) => `¥${row.minExpenses?.toFixed(2) || '0.00'}`,
+  },
+  {
+    label: "次低支出",
+    prop: "secondMinExpenses",
+    width: 120,
+    align: "center",
+    formatter: (row) => `¥${row.secondMinExpenses?.toFixed(2) || '0.00'}`,
+  },
+  // {
+  //   label: "创建人ID",
+  //   prop: "createBy",
+  //   width: 100,
+  //   align: "center",
+  // },
   {
     label: "创建人",
     prop: "createByName",
-    align: "center",
     width: 120,
-    type: "slot",
+    align: "center",
   },
   {
     label: "创建时间",
     prop: "createTime",
+    width: 180,
     align: "center",
-    // 格式化时间显示（可根据需要自定义）
     formatter: (row) => {
       if (!row.createTime) return "";
       return new Date(row.createTime).toLocaleString();
     },
   },
+  // {
+  //   label: "更新人ID",
+  //   prop: "updateBy",
+  //   width: 100,
+  //   align: "center",
+  // },
   {
     label: "更新人",
     prop: "updateByName",
@@ -106,6 +159,7 @@ const tableHeaderList = ref([
   {
     label: "更新时间",
     prop: "updateTime",
+    width: 180,
     align: "center",
     formatter: (row) => {
       if (!row.updateTime) return "";
