@@ -113,7 +113,6 @@ const formData = ref({
   // },
   date: {
     lable: "日期",
-    value: "",
     type: "date",
     required: true,
   },
@@ -206,16 +205,7 @@ const handleFormData = (data) => {
     }
   }
 
-  formData.value.expenseReason.options = [];
-  for (let i in categoryOptions.value) {
-    formData.value.expenseReason.options.push({
-      label: categoryOptions.value[i].describe,
-      value: categoryOptions.value[i].code,
-      category: categoryOptions.value[i].category,
-    });
-  }
-
-  console.log("formData", formData.value);
+  console.log("handleFormData", formData.value);
 };
 const closeForm = () => {
   isShowForm.value = false;
@@ -224,6 +214,14 @@ const closeForm = () => {
 const resetFormData = () => {
   for (let i in formData.value) {
     formData.value[i].value = "";
+  }
+  formData.value.expenseReason.options = [];
+  for (let i in categoryOptions.value) {
+    formData.value.expenseReason.options.push({
+      label: categoryOptions.value[i].describe,
+      value: categoryOptions.value[i].code,
+      category: categoryOptions.value[i].category,
+    });
   }
 };
 const handleSubmit = async (submitData) => {
@@ -254,15 +252,19 @@ const handleSubmit = async (submitData) => {
 
 // 通用工具栏
 const handlerAdd = () => {
-  formTitle.value = "日费用记录新增";
-  resetFormData();
-  handleFormData();
-  isShowForm.value = true;
+  nextTick(() => {
+    formTitle.value = "日费用记录新增";
+    resetFormData();
+    // handleFormData();
+    isShowForm.value = true;
+  });
 };
 const handlerUpdate = () => {
-  isShowForm.value = true;
-  handleFormData(selectedRows.value[0]);
-  formTitle.value = "日费用记录编辑";
+  nextTick(() => {
+    formTitle.value = "日费用记录编辑";
+    handleFormData(selectedRows.value[0]);
+    isShowForm.value = true;
+  });
 };
 const handlerDelete = async () => {
   console.log("delete", selectedRows.value);
