@@ -1,5 +1,9 @@
 <template>
-  <common-search-form :searchKey="searchKey" :handleSearch="handleSearch"/>
+  <common-search-form
+    :searchKey="searchKey"
+    :handleSearch="handleSearch"
+    :search-info="searchInfo"
+  />
   <common-table
     :table-data="tableData"
     :table-header-list="tableHeaderList"
@@ -9,8 +13,7 @@
     @update:size="(val) => handleSizeChange(val)"
     @update:current="(val) => handleCurrentChange(val)"
   />
-  <selected-expense-comp :selectedExpense="selectedExpense"/>
-  
+  <selected-expense-comp :selectedExpense="selectedExpense" />
 </template>
 
 <script setup>
@@ -22,13 +25,29 @@ import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import SelectedExpenseComp from "@/components/expense/SelectedExpenseComp.vue";
 import { yearlyExpenseServiece } from "@/api/expense/YearlyExpense";
 
-
 // 搜索条件
-const handleSearch = (searchKey) => {
-  console.log("searchKey", searchKey);
-  getTableData(searchKey);
+const handleSearch = (searchInfo) => {
+  console.log("searchInfo", searchInfo);
+  let data = {};
+  for (let i in searchInfo) {
+    data[i] = searchInfo[i].value ? searchInfo[i].value : "";
+  }
+  getTableData(data);
 };
-
+const searchInfo = ref({
+  year: {
+    title: "年份",
+    placeholder: "请选择年份",
+    type: "selection",
+    value: "",
+    options: [],
+  },
+});
+const generateYearListAndMonthList = () => {
+  for (let index = 2026; index > 2000; index--) {
+    searchInfo.value.year.options.push({ label: index, value: index });
+  }
+};
 
 // 通用表格
 const selectedRows = ref([]);
@@ -82,7 +101,7 @@ const tableHeaderList = ref([
     label: "创建人",
     prop: "createByName",
     align: "center",
-    width:120,
+    width: 120,
     type: "slot",
   },
   {
@@ -117,14 +136,13 @@ const pageParams = ref({
   total: 10,
   page: 10,
 });
-const getTableData = async (key) => {
-  pageParams.value.key = key || "";
+const getTableData = async (searchInfo) => {
+  for (let i in searchInfo) {
+    pageParams.value[i] = searchInfo[i];
+  }
   const resp = await yearlyExpenseServiece.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
-  for (let i in tableData.value) {
-    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(tableData.value[i].expenseReason);
-  }
 };
 const handleSizeChange = (size) => {
   pageParams.value.size = size;
@@ -143,6 +161,7 @@ const handleCurrentChange = (current) => {
 
 const initData = async () => {
   await getTableData();
+  generateYearListAndMonthList();
 };
 
 onMounted(async () => {

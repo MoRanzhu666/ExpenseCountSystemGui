@@ -3,7 +3,8 @@
   <common-search-form
     :searchKey="searchKey"
     :handleSearch="handleSearch"
-    :custom-conditon="{categoryOptions, yearList, monthList, dayList}"
+    :custom-conditon="{ categoryOptions, yearList, monthList, dayList }"
+    :search-info="searchInfo"
   />
   <common-table
     :table-data="tableData"
@@ -28,7 +29,7 @@
 import { dailyExpenseService } from "@/api/expense/DailyExpense";
 // import { userService } from "@/api/User";
 import { dataUtils } from "@/utils/dataUtils";
-import { onMounted, ref, watch } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import CommonTable from "@/components/CommonTable.vue";
 import CommonToolBar from "@/components/CommonToolBar.vue";
 import CommonForm from "@/components/CommonForm.vue";
@@ -37,26 +38,56 @@ import SelectedExpenseComp from "@/components/expense/SelectedExpenseComp.vue";
 import { ccodeService } from "@/api/system/CCode";
 
 // 搜索条件
-const handleSearch = (searchKey) => {
-  console.log("searchKey", searchKey);
-  getTableData({
-    key: searchKey.searchKey,
-    expenseReason: searchKey.searchCategory,
-  });
+const handleSearch = (searchInfo) => {
+  console.log("searchInfo", searchInfo);
+  let data = {};
+  for (let i in searchInfo) {
+    data[i] = searchInfo[i].value ? searchInfo[i].value : "";
+  }
+  getTableData(data);
 };
-const yearList = ref([])
-const monthList = ref([])
+const searchInfo = ref({
+  key: {
+    title: "",
+    placeholder: "请输入文本",
+    type: "text",
+    value: "",
+  },
+  expenseReason: {
+    title: "分类",
+    placeholder: "请选择支出原因",
+    type: "selection",
+    value: "",
+    options: [],
+  },
+  year: {
+    title: "年份",
+    placeholder: "请选择年份",
+    type: "selection",
+    value: "",
+    options: [],
+  },
+  month: {
+    title: "月份",
+    placeholder: "请选择月份",
+    type: "selection",
+    value: "",
+    options: [],
+  },
+});
+const yearList = ref([]);
+const monthList = ref([]);
 const generateYearListAndMonthList = () => {
   for (let index = 2026; index > 2000; index--) {
-    yearList.value.push({label:index,value:index})
+    yearList.value.push({ label: index, value: index });
   }
-  
+
   for (let index = 1; index < 13; index++) {
-    monthList.value.push({label:index,value:index})
+    monthList.value.push({ label: index, value: index });
   }
-}
-
-
+  searchInfo.value.year.options = yearList.value;
+  searchInfo.value.month.options = monthList.value;
+};
 
 // 通用表单
 const formTitle = ref("日费用记录编辑");
@@ -157,6 +188,14 @@ const categoryOptions = ref([]);
 const getCategoryOptions = async () => {
   const resp = await ccodeService.categorySelector({ category: "EXPENSE" });
   dataUtils.processRespData(categoryOptions, resp, dataUtils.processMap.NORMAL);
+  categoryOptions.value = categoryOptions.value.map((item) => {
+    let element = { ...item };
+    element.label = element.describe;
+    element.value = element.code;
+
+    return element;
+  });
+  searchInfo.value.expenseReason.options = categoryOptions.value;
 };
 
 const isShowForm = ref(false);
@@ -189,9 +228,11 @@ const resetFormData = () => {
 };
 const handleSubmit = async (submitData) => {
   if (submitData.id) {
-    let result =  formData.value.expenseReason.options.find((item) => {
+    let result = formData.value.expenseReason.options.find((item) => {
       const isChinese = /[\u4e00-\u9fa5]/.test(submitData.expenseReason);
-      return isChinese ? item.label === submitData.expenseReason : item.value === submitData.expenseReason;
+      return isChinese
+        ? item.label === submitData.expenseReason
+        : item.value === submitData.expenseReason;
     });
     submitData.expenseReason = result ? result.value : submitData.expenseReason;
     const resp = await dailyExpenseService.update(submitData);
@@ -426,9 +467,10 @@ const pageParams = ref({
   total: 10,
   page: 10,
 });
-const getTableData = async (key) => {
-  pageParams.value.key = key?.key || "";
-  pageParams.value.expenseReason = key?.expenseReason || "";
+const getTableData = async (searchInfo) => {
+  for (let i in searchInfo) {
+    pageParams.value[i] = searchInfo[i];
+  }
   const resp = await dailyExpenseService.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
@@ -440,10 +482,18 @@ const getTableData = async (key) => {
   }
 
   // 格式化日期
-  for(let i in tableData.value){
-    tableData.value[i].date = tableData.value[i].year + '-' + (tableData.value[i].month <10 ? '0' + tableData.value[i].month : tableData.value[i].month) + '-' + (tableData.value[i].day <10 ? '0' + tableData.value[i].day : tableData.value[i].day);
+  for (let i in tableData.value) {
+    tableData.value[i].date =
+      tableData.value[i].year +
+      "-" +
+      (tableData.value[i].month < 10
+        ? "0" + tableData.value[i].month
+        : tableData.value[i].month) +
+      "-" +
+      (tableData.value[i].day < 10
+        ? "0" + tableData.value[i].day
+        : tableData.value[i].day);
   }
-
 };
 const handleSizeChange = (size) => {
   pageParams.value.size = size;
@@ -467,8 +517,10 @@ const initData = async () => {
 };
 
 onMounted(async () => {
-  await initData();
-  generateYearListAndMonthList()
+  nextTick(async () => {
+    await initData();
+    generateYearListAndMonthList();
+  });
 });
 </script>
 

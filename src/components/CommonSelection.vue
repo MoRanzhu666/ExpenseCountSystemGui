@@ -30,7 +30,7 @@ const props = defineProps({
   selectChange: Function,
 });
 
-const emit = defineEmits(["update:modelValue", "update:rules"]);
+const emit = defineEmits(["update:modelValue", "update:rules", "change"]);
 
 const filterText = ref("");
 
@@ -67,6 +67,7 @@ const handleChange = (val) => {
   }
   emit("update:modelValue", val);
   emit("update:rules");
+  emit("change", val);
 };
 
 onMounted(() => {

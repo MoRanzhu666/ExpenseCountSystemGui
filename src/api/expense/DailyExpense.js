@@ -9,12 +9,7 @@ const baseUrl = process.env.VUE_APP_BASE_URL+"/expense";
 const getPage = (data) => {
   return request
     .get(baseUrl + "/dailyExpenses/getPage", {
-      params: {
-        current: data.current,
-        size: data.size,
-        key:data.key,
-        expenseReason:data.expenseReason,
-      },
+      params: {...data},
     })
     .then((resp) => {
       return resp;
@@ -36,9 +31,7 @@ const update = (data) => {
 const deleteById = (data) => {
   return request
     .delete(baseUrl + "/dailyExpenses/deleteById", {
-      params: {
-        id: data.id,
-      },
+      params: {...data},
     })
     .then((resp) => {
       return resp;
@@ -48,9 +41,7 @@ const deleteById = (data) => {
 const deleteByIds = (data) => {
   return request
     .delete(baseUrl + "/dailyExpenses/deleteByIds", {
-      params: {
-        ids: data.ids,
-      },
+      params:{...data},
     })
     .then((resp) => {
       return resp;

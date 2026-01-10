@@ -9,11 +9,7 @@ const baseUrl = process.env.VUE_APP_BASE_URL+"/expense/yearlyExpense";
 const getPage = (data) => {
   return request
     .get(baseUrl + "/getPage", {
-      params: {
-        current: data.current,
-        size: data.size,
-        key:data.key
-      },
+      params: {...data},
     })
     .then((resp) => {
       return resp;

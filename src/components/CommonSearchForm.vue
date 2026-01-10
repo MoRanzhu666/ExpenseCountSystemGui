@@ -2,46 +2,31 @@
   <div class="searchForm">
     <el-row :gutter="[10, 10]" class="search-row">
       <!-- 搜索输入框 -->
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="2">
-        <el-input
-          v-model="searchInfo.searchKey"
-          @keydown.enter="handleSearch(searchInfo)"
-          placeholder="请输入文本"
-          clearable
-        >
-          <template #prefix>
-            <el-icon><Search /></el-icon>
-          </template>
-        </el-input>
-      </el-col>
+      <template v-for="(item, index) in searchInfo" :key="index">
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="2" v-show="item.type=='text'">
+          <el-input
+            v-model="item.value"
+            @blur="handleSearch(searchInfo)"
+            @keydown.enter="handleSearch(searchInfo)"
+            :placeholder="item.placeholder"
+            clearable
+          >
+            <template #prefix>
+              <el-icon><Search /></el-icon>
+            </template>
+          </el-input>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="2" v-show="item.type=='selection'">
+          <common-selection
+            @change="handleChange"
+            v-model="item.value"
+            :options="item.options"
+            :option-placeholder="item.placeholder"
+            clearable
+          />
+        </el-col>
+      </template>
 
-      <!-- 类别选择 -->
-      <el-col :xs="12" :sm="6" :md="5" :lg="2" :xl="2" v-if="customConditon">
-        <common-selection
-          v-if="customConditon.yearList.length > 0"
-          v-model="searchInfo.searchYear"
-          :options="customConditon.yearList"
-          :option-placeholder="'年份'"
-          clearable
-        />
-      </el-col>
-      <el-col :xs="12" :sm="6" :md="5" :lg="2" :xl="2" v-if="customConditon"
-        ><common-selection
-          v-if="customConditon.monthList.length > 0"
-          v-model="searchInfo.searchMonth"
-          :options="customConditon.monthList"
-          :option-placeholder="'月份'"
-          clea
-          rable
-      /></el-col>
-      <el-col :xs="12" :sm="6" :md="5" :lg="2" :xl="2" v-if="customConditon">
-        <common-selection
-          v-if="customConditon.categoryOptions.length > 0"
-          v-model="searchInfo.searchCategory"
-          :options="processCategoryOptions(customConditon.categoryOptions)"
-          :option-placeholder="'类别'"
-          clearable
-      /></el-col>
 
       <!-- 查询按钮 -->
       <el-col :xs="12" :sm="6" :md="4" :lg="3" :xl="3">
@@ -58,7 +43,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import CommonSelection from "@/components/CommonSelection.vue";
 
@@ -70,25 +55,19 @@ const props = defineProps({
   customConditon: {
     type: Object,
   },
-  // categoryOptions: {
-  //   type: Array,
-  //   default: () => [],
-  // },
+
+  searchInfo: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
-const searchInfo = ref({
-  searchKey: "",
-});
-
-const processCategoryOptions = (options) => {
-  return options.map((opt) => ({
-    value: opt.code,
-    label: opt.describe,
-  }));
-};
+const handleChange = () => {
+  props.handleSearch(props.searchInfo)
+}
 
 onMounted(() => {
-  console.log("categoryOptions", props.categoryOptions);
+  console.log("categoryOptions", props);
 });
 </script>
 

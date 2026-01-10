@@ -1,5 +1,9 @@
 <template>
-  <common-search-form :searchKey="searchKey" :handleSearch="handleSearch" />
+  <common-search-form
+    :searchKey="searchKey"
+    :handleSearch="handleSearch"
+    :search-info="searchInfo"
+  />
   <common-table
     :table-data="tableData"
     :table-header-list="tableHeaderList"
@@ -22,9 +26,27 @@ import SelectedExpenseComp from "@/components/expense/SelectedExpenseComp.vue";
 import { monthlyExpenseServiece } from "@/api/expense/MonthlyExpense";
 
 // 搜索条件
-const handleSearch = (searchKey) => {
-  console.log("searchKey", searchKey);
-  getTableData(searchKey);
+const handleSearch = (searchInfo) => {
+  console.log("searchInfo", searchInfo);
+  let data = {};
+  for (let i in searchInfo) {
+    data[i] = searchInfo[i].value ? searchInfo[i].value : "";
+  }
+  getTableData(data);
+};
+const searchInfo = ref({
+  year: {
+    title: "年份",
+    placeholder: "请选择年份",
+    type: "selection",
+    value: "",
+    options: [],
+  },
+});
+const generateYearListAndMonthList = () => {
+  for (let index = 2026; index > 2000; index--) {
+    searchInfo.value.year.options.push({ label: index, value: index });
+  }
 };
 
 // 通用表格
@@ -79,14 +101,14 @@ const tableHeaderList = ref([
     prop: "monthlyTotal",
     width: 120,
     align: "center",
-    formatter: (row) => `¥${row.monthlyTotal?.toFixed(2) || '0.00'}`,
+    formatter: (row) => `¥${row.monthlyTotal?.toFixed(2) || "0.00"}`,
   },
   {
     label: "平均支出",
     prop: "averageExpenses",
     width: 120,
     align: "center",
-    formatter: (row) => `¥${row.averageExpenses?.toFixed(2) || '0.00'}`,
+    formatter: (row) => `¥${row.averageExpenses?.toFixed(2) || "0.00"}`,
   },
   {
     label: "支出笔数",
@@ -99,28 +121,28 @@ const tableHeaderList = ref([
     prop: "maxExpenses",
     width: 120,
     align: "center",
-    formatter: (row) => `¥${row.maxExpenses?.toFixed(2) || '0.00'}`,
+    formatter: (row) => `¥${row.maxExpenses?.toFixed(2) || "0.00"}`,
   },
   {
     label: "次高支出",
     prop: "secondMaxExpenses",
     width: 120,
     align: "center",
-    formatter: (row) => `¥${row.secondMaxExpenses?.toFixed(2) || '0.00'}`,
+    formatter: (row) => `¥${row.secondMaxExpenses?.toFixed(2) || "0.00"}`,
   },
   {
     label: "最低支出",
     prop: "minExpenses",
     width: 120,
     align: "center",
-    formatter: (row) => `¥${row.minExpenses?.toFixed(2) || '0.00'}`,
+    formatter: (row) => `¥${row.minExpenses?.toFixed(2) || "0.00"}`,
   },
   {
     label: "次低支出",
     prop: "secondMinExpenses",
     width: 120,
     align: "center",
-    formatter: (row) => `¥${row.secondMinExpenses?.toFixed(2) || '0.00'}`,
+    formatter: (row) => `¥${row.secondMinExpenses?.toFixed(2) || "0.00"}`,
   },
   // {
   //   label: "创建人ID",
@@ -173,16 +195,18 @@ const pageParams = ref({
   total: 10,
   page: 10,
 });
-const getTableData = async (key) => {
-  pageParams.value.key = key || "";
+const getTableData = async (searchInfo) => {
+  for (let i in searchInfo) {
+    pageParams.value[i] = searchInfo[i];
+  }
   const resp = await monthlyExpenseServiece.getPage(pageParams.value);
   dataUtils.processRespData(tableData, resp, dataUtils.processMap.PAGE);
   dataUtils.processRespPageParams(pageParams, resp);
-  for (let i in tableData.value) {
-    tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(
-      tableData.value[i].expenseReason
-    );
-  }
+  // for (let i in tableData.value) {
+  //   tableData.value[i].expenseReason = dataUtils.formatExpenseReasonMap(
+  //     tableData.value[i].expenseReason
+  //   );
+  // }
 };
 const handleSizeChange = (size) => {
   pageParams.value.size = size;
@@ -201,6 +225,7 @@ const handleCurrentChange = (current) => {
 
 const initData = async () => {
   await getTableData();
+  generateYearListAndMonthList();
 };
 
 onMounted(async () => {
