@@ -82,6 +82,7 @@ const initializeFormData = () => {
     initData[key] = props.formData[key].value;
   }
   submitFormData.value = initData;
+  console.log("submitFormData", submitFormData.value);
 };
 
 // 生成验证规则
@@ -104,6 +105,7 @@ const generateRules = () => {
 
 // 提交处理
 const handleSubmit = async () => {
+  console.log("handleSubmit", submitFormData.value);
   if (!formRef.value) return;
   
   try {

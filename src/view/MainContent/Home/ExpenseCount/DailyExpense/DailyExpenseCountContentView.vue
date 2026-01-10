@@ -36,6 +36,7 @@ import CommonForm from "@/components/CommonForm.vue";
 import CommonSearchForm from "@/components/CommonSearchForm.vue";
 import SelectedExpenseComp from "@/components/expense/SelectedExpenseComp.vue";
 import { ccodeService } from "@/api/system/CCode";
+import { formatDateUtils } from "@/utils/formatDateUtils";
 
 // 搜索条件
 const handleSearch = (searchInfo) => {
@@ -115,6 +116,7 @@ const formData = ref({
     lable: "日期",
     type: "date",
     required: true,
+    value:new Date()
   },
   singleExpense: {
     lable: "单次支出",
@@ -223,6 +225,7 @@ const resetFormData = () => {
       category: categoryOptions.value[i].category,
     });
   }
+  formData.value.date.value = formatDateUtils.formatToString(formatDateUtils.pattern);
 };
 const handleSubmit = async (submitData) => {
   if (submitData.id) {
